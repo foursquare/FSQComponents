@@ -62,16 +62,26 @@
 
 - (void)setObject:(id)object forDictionary:(NSMutableDictionary *)dictionary forState:(UIControlState)state {
     if (object) {
-        for (NSNumber *controlState in [[self class] allControlStates]) {
-            if ((state & [controlState unsignedIntegerValue]) != 0) {
-                dictionary[controlState] = object;
+        if (state == 0) {
+            dictionary[@(state)] = object;
+        }
+        else {
+            for (NSNumber *controlState in [[self class] allControlStates]) {
+                if ((state & [controlState unsignedIntegerValue]) != 0) {
+                    dictionary[controlState] = object;
+                }
             }
         }
     }
     else {
-        for (NSNumber *controlState in [[self class] allControlStates]) {
-            if ((state & [controlState unsignedIntegerValue]) != 0) {
-                [dictionary removeObjectForKey:controlState];
+        if (state == 0) {
+            [dictionary removeObjectForKey:@(state)];
+        }
+        else {
+            for (NSNumber *controlState in [[self class] allControlStates]) {
+                if ((state & [controlState unsignedIntegerValue]) != 0) {
+                    [dictionary removeObjectForKey:controlState];
+                }
             }
         }
     }
