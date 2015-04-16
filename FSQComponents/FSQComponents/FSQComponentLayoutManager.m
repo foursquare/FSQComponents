@@ -65,18 +65,16 @@ static const CGFloat kStandardPadding = 10.0;
             requiredSpace = width;
             break;
         case FSQComponentLayoutTypeFlexible:
-            requiredSpace = ceil(specification.minimumWidthPercent * width);
-            break;
         case FSQComponentLayoutTypeFixed:
-            requiredSpace = (specification.fixedWidth > 0.0) ? specification.fixedWidth : ceilf(specification.fixedWidthPercent * width);
+            requiredSpace = (specification.widthConstraint != 0.0) ? specification.widthConstraint : ceil(specification.widthPercentConstraint * width);
             break;
     }
     return MIN(requiredSpace, width);
 }
 
 + (NSArray *)componentLayoutInfoForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width {
-    return [self componentLayoutInfoForViewModel:model width:width block:^CGFloat(FSQComponentSpecification *specification, CGFloat width) {
-        return [specification.viewClass heightForViewModel:specification.viewModel width:width];
+    return [self componentLayoutInfoForViewModel:model width:width layoutBlock:^CGSize (FSQComponentSpecification *specification, CGFloat layoutWidth) {
+        return [specification.viewClass sizeForViewModel:specification.viewModel constrainedToSize:CGSizeMake(layoutWidth, CGFLOAT_MAX)];
     }];
 }
 
@@ -85,12 +83,20 @@ static const CGFloat kStandardPadding = 10.0;
                                                width:(CGFloat)width top:(CGFloat)top
                                            isTopLine:(BOOL)isTopLine
                                         isBottomLine:(BOOL)isBottomLine
-                                               block:(CGFloat (^)(FSQComponentSpecification *specification, CGFloat width))block {
+                                         layoutBlock:(CGSize (^)(FSQComponentSpecification *specification, CGFloat width))layoutBlock {
     
     CGFloat requiredWidths[specifications.count];
     
     CGFloat remainingWidth = width;
     NSInteger numberOfFlexibleItems = 0;
+    
+    CGFloat contentWidth = width;
+    for (NSInteger i = 0; i < specifications.count; ++i) {
+        FSQComponentSpecification *specification = specifications[i];
+        CGFloat leftInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:(i == 0)];
+        CGFloat rightInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:(i == specifications.count - 1)];
+        contentWidth -= leftInset + rightInset;
+    }
     
     for (NSInteger i = 0; i < specifications.count; ++i) {
         FSQComponentSpecification *specification = specifications[i];
@@ -98,7 +104,7 @@ static const CGFloat kStandardPadding = 10.0;
         CGFloat leftInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:(i == 0)];
         CGFloat rightInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:(i == specifications.count - 1)];
         
-        requiredWidths[i] = [self layoutWidthForSpecification:specification width:width] + leftInset + rightInset;
+        requiredWidths[i] = [self layoutWidthForSpecification:specification width:contentWidth] + leftInset + rightInset;
         remainingWidth -= requiredWidths[i];
         
         if (specification.layoutType == FSQComponentLayoutTypeFlexible) {
@@ -126,7 +132,7 @@ static const CGFloat kStandardPadding = 10.0;
         UIEdgeInsets insets = [self smartAdjustedInsetsForViewModel:model insets:specification.insets isTopEdge:isTopLine isLeftEdge:(i == 0) isBottomEdge:isBottomLine isRightEdge:(i == specifications.count - 1)];
         
         CGFloat layoutWidth = requiredWidths[i] - insets.left - insets.right;
-        CGFloat height = block(specification, layoutWidth);
+        CGFloat height = layoutBlock(specification, layoutWidth).height;
         CGRect frame = CGRectMake(xOrigin + insets.left, top + insets.top, layoutWidth, height);
         xOrigin = CGRectGetMaxX(frame) + insets.right;
         
@@ -137,19 +143,21 @@ static const CGFloat kStandardPadding = 10.0;
     return frames;
 }
 
-+ (NSArray *)componentLayoutInfoForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width block:(CGFloat (^)(FSQComponentSpecification *specification, CGFloat width))block {
++ (NSArray *)componentLayoutInfoForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width layoutBlock:(CGSize (^)(FSQComponentSpecification *specification, CGFloat width))layoutBlock {
     NSMutableArray *frames = [[NSMutableArray alloc] init];
     
     __block CGFloat yOrigin = 0.0;
-    __block CGFloat currentLineWidth = width;
-    __block CGFloat lastRightInset = 0.0;
+    
+    __block CGFloat currentFixedWidthAllocated = 0.0;
+    __block CGFloat currentPercentWidthAllocated = 0.0;
+    __block CGFloat currentLineInsetsAllocated = 0.0;
     
     NSMutableArray *pendingSpecifications = [[NSMutableArray alloc] init];
     
     void (^flushLine)(void) = ^() {
         BOOL isTopLine = (frames.count == 0);
         BOOL isBottomLine = (frames.count + pendingSpecifications.count == model.componentSpecifications.count);
-        NSArray *lineFrames = [self componentLayoutInfoForLineWithViewModel:model specifications:pendingSpecifications width:width top:yOrigin isTopLine:isTopLine isBottomLine:isBottomLine block:block];
+        NSArray *lineFrames = [self componentLayoutInfoForLineWithViewModel:model specifications:pendingSpecifications width:width top:yOrigin isTopLine:isTopLine isBottomLine:isBottomLine layoutBlock:layoutBlock];
         for (NSInteger i = 0; i < lineFrames.count; ++i) {
             FSQComponentLayoutInfo info;
             [lineFrames[i] getValue:&info];
@@ -159,8 +167,9 @@ static const CGFloat kStandardPadding = 10.0;
         [frames addObjectsFromArray:lineFrames];
         [pendingSpecifications removeAllObjects];
         
-        currentLineWidth = width;
-        lastRightInset = 0.0;
+        currentFixedWidthAllocated = 0.0;
+        currentPercentWidthAllocated = 0.0;
+        currentLineInsetsAllocated = 0.0;
     };
     
     for (NSInteger i = 0; i < model.componentSpecifications.count; ++i) {
@@ -178,7 +187,7 @@ static const CGFloat kStandardPadding = 10.0;
                 UIEdgeInsets insets = [self smartAdjustedInsetsForViewModel:model insets:specification.insets isTopEdge:isTopEdge isLeftEdge:YES isBottomEdge:isBottomEdge isRightEdge:YES];
                 
                 CGFloat layoutWidth = width - insets.left - insets.right;
-                CGFloat height = block(specification, layoutWidth);
+                CGFloat height = layoutBlock(specification, layoutWidth).height;
                 CGRect frame = CGRectMake(insets.left, yOrigin + insets.top, layoutWidth, height);
                 yOrigin = CGRectGetMaxY(frame) + insets.bottom;
                 
@@ -188,17 +197,32 @@ static const CGFloat kStandardPadding = 10.0;
             }
             case FSQComponentLayoutTypeFlexible:
             case FSQComponentLayoutTypeFixed: {
-                CGFloat layoutWidth = [self layoutWidthForSpecification:specification width:width];
-                
                 CGFloat leftInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:(pendingSpecifications.count == 0)];
+                CGFloat rightInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:NO];
+                
+                CGFloat leftEdgeInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:YES];
                 CGFloat rightEdgeInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:YES];
                 
-                if (layoutWidth + leftInset + rightEdgeInset > currentLineWidth) {
+                CGFloat fixedWidth = 0.0;
+                CGFloat percentWidth = 0.0;
+                if (specification.widthConstraint) {
+                    fixedWidth = MIN(specification.widthConstraint, width - leftEdgeInset - rightEdgeInset);
+                }
+                else {
+                    percentWidth = MIN(specification.widthPercentConstraint, 1.0);
+                }
+                
+                CGFloat contentWidth = width - currentLineInsetsAllocated - leftInset - rightEdgeInset;
+                CGFloat requiredWidth = currentFixedWidthAllocated + fixedWidth + ceil(contentWidth * (currentPercentWidthAllocated + percentWidth));
+                
+                if (requiredWidth > contentWidth) {
                     flushLine();
                 }
                 
-                currentLineWidth -= lastRightInset + leftInset + layoutWidth;
-                lastRightInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:NO];
+                currentFixedWidthAllocated += fixedWidth;
+                currentPercentWidthAllocated += percentWidth;
+                currentLineInsetsAllocated += leftInset + rightInset;
+                
                 [pendingSpecifications addObject:specification];
                 break;
             }
@@ -212,28 +236,28 @@ static const CGFloat kStandardPadding = 10.0;
     return frames;
 }
 
-+ (CGFloat)heightForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width block:(CGFloat (^)(FSQComponentSpecification *specification, CGFloat width))block {
++ (CGSize)sizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize layoutBlock:(CGSize (^)(FSQComponentSpecification *specification, CGFloat width))layoutBlock {
     CGFloat height = 0.0;
     
-    NSArray *componentFrames = [self componentLayoutInfoForViewModel:model width:width block:block];
+    NSArray *componentFrames = [self componentLayoutInfoForViewModel:model width:constrainedToSize.width layoutBlock:layoutBlock];
     for (NSInteger i = 0; i < model.componentSpecifications.count; ++i) {
         FSQComponentLayoutInfo info;
         [componentFrames[i] getValue:&info];
         height = MAX(height, CGRectGetMaxY(info.frame) + info.insets.bottom);
     }
     
-    return height;
+    return CGSizeMake(constrainedToSize.width, height);
 }
 
-+ (CGFloat)heightForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width {
-    return [self heightForViewModel:model width:width block:^CGFloat (FSQComponentSpecification *specification, CGFloat layoutWidth) {
-        return [specification.viewClass heightForViewModel:specification.viewModel width:layoutWidth];
++ (CGSize)sizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    return [self sizeForViewModel:model constrainedToSize:constrainedToSize layoutBlock:^CGSize (FSQComponentSpecification *specification, CGFloat layoutWidth) {
+        return [specification.viewClass sizeForViewModel:specification.viewModel constrainedToSize:CGSizeMake(layoutWidth, CGFLOAT_MAX)];
     }];
 }
 
-+ (CGFloat)estimatedHeightForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width {
-    return [self heightForViewModel:model width:width block:^CGFloat (FSQComponentSpecification *specification, CGFloat layoutWidth) {
-        return [specification.viewClass estimatedHeightForViewModel:specification.viewModel width:layoutWidth];
++ (CGSize)estimatedSizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    return [self sizeForViewModel:model constrainedToSize:constrainedToSize layoutBlock:^CGSize (FSQComponentSpecification *specification, CGFloat layoutWidth) {
+        return [specification.viewClass estimatedSizeForViewModel:specification.viewModel constrainedToSize:CGSizeMake(layoutWidth, CGFLOAT_MAX)];
     }];
 }
 

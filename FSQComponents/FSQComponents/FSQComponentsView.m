@@ -143,12 +143,12 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
 
 #pragma mark - Class methods
 
-+ (CGFloat)heightForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width {
-    return [FSQComponentLayoutManager heightForViewModel:model width:width];
++ (CGSize)sizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    return [FSQComponentLayoutManager sizeForViewModel:model constrainedToSize:constrainedToSize];
 }
 
-+ (CGFloat)estimatedHeightForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width {
-    return [FSQComponentLayoutManager estimatedHeightForViewModel:model width:width];
++ (CGSize)estimatedSizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    return [FSQComponentLayoutManager estimatedSizeForViewModel:model constrainedToSize:constrainedToSize];
 }
 
 @end

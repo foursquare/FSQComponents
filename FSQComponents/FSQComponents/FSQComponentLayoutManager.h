@@ -26,7 +26,8 @@ NS_ROOT_CLASS
 @interface FSQComponentLayoutManager
 
 + (NSArray *)componentLayoutInfoForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width;
-+ (CGFloat)heightForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width;
-+ (CGFloat)estimatedHeightForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width;
+
++ (CGSize)sizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
++ (CGSize)estimatedSizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
 
 @end

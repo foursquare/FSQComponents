@@ -125,7 +125,7 @@ extern const UIEdgeInsets kFSQComponentSmartInsets;
  *  @return The height required to layout the view + model pair at the provided
  *  width.
  */
-+ (CGFloat)heightForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width;
++ (CGSize)sizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
 
 /**
  *  This method is responsible for providing an estimate of the layout height
@@ -137,6 +137,6 @@ extern const UIEdgeInsets kFSQComponentSmartInsets;
  *  @return The estimated height required to layout the view + model pair at the
  *  provided width.
  */
-+ (CGFloat)estimatedHeightForViewModel:(FSQComponentsViewModel *)model width:(CGFloat)width;
++ (CGSize)estimatedSizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
 
 @end

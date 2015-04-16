@@ -36,31 +36,37 @@
 - (void)configureWithViewModel:(id)model;
 
 /**
- *  This method is responsible for providing the layout height for the component
- *  given the view model and the width constraint.
+ *  This method is responsible for providing the layout size for the component
+ *  given the view model and the size constraints. The components architechture
+ *  will always provide a valid width constraint. CGFLOAT_MAX is provided if
+ *  there is no constraint.
  *
  *  @param model The view model for the component.
- *  @param width The width of the frame that the view will be provisioned.
+ *  @param constrainedToSize The maximum size of the frame that the view can be
+ *  allotted.
  *
- *  @return The height required to layout the view + model pair at the provided
- *  width.
+ *  @return The size required to layout the view + model pair with the provided
+ *  constraints.
  */
-+ (CGFloat)heightForViewModel:(id)model width:(CGFloat)width;
++ (CGSize)sizeForViewModel:(id)model constrainedToSize:(CGSize)constrainedToSize;
 
 /**
- *  This method is responsible for providing an estimate of the layout height
- *  for the component given the view model and the width constraint.
+ *  This method is responsible for providing an estimate of the layout size
+ *  for the component given the view model and the size constraints. The
+ *  components architechture will always provide a valid width constraint.
+ *  CGFLOAT_MAX is provided if there is no constraint.
  *
  *  @param model The view model for the component.
- *  @param width The width of the frame that the view will be provisioned.
+ *  @param constrainedToSize The maximum size of the frame that the view can be
+ *  allotted.
  *
- *  @return The estimated height required to layout the view + model at the
- *  provided width.
+ *  @return The estimated size required to layout the view + model with the
+ *  provided constraints.
  *
  *  @note This method should avoid doing any expensive computation. It is used
  *  as an optimization to provide an estimation of the necessary layout height.
  */
-+ (CGFloat)estimatedHeightForViewModel:(id)model width:(CGFloat)width;
++ (CGSize)estimatedSizeForViewModel:(id)model constrainedToSize:(CGSize)constrainedToSize;
 
 /**
  *  If prepareForReuse is called on an instance of FSQComponentsView, the call
