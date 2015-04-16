@@ -26,7 +26,7 @@
 
 - (void)configureWithViewModel:(ComponentTextViewModel *)model;
 
-+ (CGFloat)heightForViewModel:(ComponentTextViewModel *)model width:(CGFloat)width;
-+ (CGFloat)estimatedHeightForViewModel:(ComponentTextViewModel *)model width:(CGFloat)width;
++ (CGSize)sizeForViewModel:(ComponentTextViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
++ (CGSize)estimatedSizeForViewModel:(ComponentTextViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
 
 @end

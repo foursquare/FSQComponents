@@ -25,7 +25,7 @@
 
 - (void)configureWithViewModel:(ComponentPhotoViewModel *)model;
 
-+ (CGFloat)heightForViewModel:(ComponentPhotoViewModel *)model width:(CGFloat)width;
-+ (CGFloat)estimatedHeightForViewModel:(ComponentPhotoViewModel *)model width:(CGFloat)width;
++ (CGSize)sizeForViewModel:(ComponentPhotoViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
++ (CGSize)estimatedSizeForViewModel:(ComponentPhotoViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
 
 @end

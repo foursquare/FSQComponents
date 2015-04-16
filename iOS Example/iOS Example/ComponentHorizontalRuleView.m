@@ -80,16 +80,16 @@
     return 1.0 / [[UIScreen mainScreen] scale];
 }
 
-+ (CGFloat)heightForViewModel:(ComponentHorizontalRuleViewModel *)model width:(CGFloat)width {
++ (CGSize)sizeForViewModel:(ComponentHorizontalRuleViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
     CGFloat height = 0.0;
     height += model.insets.top;
     height += [self lineHeight];
     height += model.insets.bottom;
-    return height;
+    return CGSizeMake(constrainedToSize.width, height);
 }
 
-+ (CGFloat)estimatedHeightForViewModel:(ComponentHorizontalRuleViewModel *)model width:(CGFloat)width {
-    return [self heightForViewModel:model width:width];
++ (CGSize)estimatedSizeForViewModel:(ComponentHorizontalRuleViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    return [self sizeForViewModel:model constrainedToSize:constrainedToSize];
 }
 
 @end

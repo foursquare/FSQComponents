@@ -8,8 +8,7 @@
 
 #import "AppDelegate.h"
 
-#import "ViewController.h"
-#import "TableViewController.h"
+#import "MainViewController.h"
 
 @interface AppDelegate ()
 
@@ -20,7 +19,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    ViewController *root = [[ViewController alloc] init];
+    MainViewController *root = [[MainViewController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:root];
     
     self.window.rootViewController = navigationController;

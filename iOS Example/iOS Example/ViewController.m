@@ -42,7 +42,7 @@
     [super viewDidLayoutSubviews];
     
     CGFloat width = self.view.frame.size.width;
-    CGFloat height = [FSQComponentsView heightForViewModel:self.viewModel width:width];
+    CGFloat height = [FSQComponentsView sizeForViewModel:self.viewModel constrainedToSize:self.view.frame.size].height;
     self.componentsView.frame = CGRectMake(0.0, self.topLayoutGuide.length, width, height);
 }
 

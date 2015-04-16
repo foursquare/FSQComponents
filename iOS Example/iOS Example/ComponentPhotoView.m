@@ -79,12 +79,12 @@
 
 #pragma mark - Class methods
 
-+ (CGFloat)heightForViewModel:(ComponentPhotoViewModel *)model width:(CGFloat)width {
-    return width;
++ (CGSize)sizeForViewModel:(ComponentPhotoViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    return CGSizeMake(constrainedToSize.width, constrainedToSize.width);
 }
 
-+ (CGFloat)estimatedHeightForViewModel:(ComponentPhotoViewModel *)model width:(CGFloat)width {
-    return [self heightForViewModel:model width:width];
++ (CGSize)estimatedSizeForViewModel:(ComponentPhotoViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    return [self sizeForViewModel:model constrainedToSize:constrainedToSize];
 }
 
 @end

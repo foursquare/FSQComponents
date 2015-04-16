@@ -1,31 +1,30 @@
 //
-//  TableViewController.m
+//  LayoutExampleViewController.m
 //  iOS Example
 //
-//  Created by Cameron Mulhern on 3/4/15.
-//  Copyright (c) 2015 foursquare. All rights reserved.
+//  Created by Cameron Mulhern on 4/16/15.
+//  Copyright (c) 2015 Cameron Mulhern. All rights reserved.
 //
 
-#import "TableViewController.h"
+#import "LayoutExampleViewController.h"
 
-#import "ComponentPhotoView.h"
-#import "ContentModel.h"
-#import "ContentViewModel.h"
 #import "ComponentsCell.h"
+#import "FSQComponentButton.h"
+#import "FSQComponentsView.h"
 
-@interface TableViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface LayoutExampleViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic) UITableView *tableView;
 
-@property (nonatomic) ContentViewModel *viewModel;
+@property (nonatomic) FSQComponentsViewModel *viewModel;
 
 @end
 
-@implementation TableViewController
+@implementation LayoutExampleViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        self.title = @"Example";
+        self.title = @"Layout Example";
     }
     return self;
 }
@@ -51,23 +50,24 @@
 }
 
 - (void)loadContent {
-    ContentModel *contentModel = [[ContentModel alloc] initWithName:@"Cameron Mulhern" message:@"Waited all morning for this breathless view. It was definitely worth it." image:[UIImage imageNamed:@"image"]];
+    NSString *loremIpsum = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
     
-    self.viewModel = [[ContentViewModel alloc] initWithContentModel:contentModel];
+    NSMutableArray *specifications = [[NSMutableArray alloc] init];
+    for (NSString *token in [loremIpsum componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]) {
+        FSQComponentButtonModel *model = [[FSQComponentButtonModel alloc] initWithImage:nil title:token titleColor:[UIColor whiteColor]];
+        model.font = [UIFont systemFontOfSize:12.0];
+        model.backgroundColor = [UIColor blueColor];
+        model.cornerRadius = 3.0;
+        model.horizontalPadding = 10.0;
+        
+        FSQComponentSpecification *specification = [[FSQComponentSpecification alloc] initWithViewModel:model viewClass:[UIButton class]];
+        specification.layoutType = FSQComponentLayoutTypeFixed;
+        specification.widthConstraint = [UIButton sizeForViewModel:model constrainedToSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)].width;
+        [specifications addObject:specification];
+    }
     
-    __weak typeof(self) weak_self = self;
-    self.viewModel.photoViewModel.photoSelectedBlock = ^(ComponentPhotoView *view) {
-        [weak_self photoSelectedForView:view];
-    };
-    
+    self.viewModel = [[FSQComponentsViewModel alloc] initWithComponentSpecifications:specifications];
     [self.tableView reloadData];
-}
-
-- (void)photoSelectedForView:(ComponentPhotoView *)view {
-    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.toValue = @(M_PI * 2.0);
-    rotationAnimation.duration = 0.5;
-    [view.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
 
 #pragma mark - UITableViewDataSource

@@ -81,12 +81,13 @@
     return ceilf(rect.size.height);
 }
 
-+ (CGFloat)heightForViewModel:(ComponentTextViewModel *)model width:(CGFloat)width {
-    return (model.multiline) ? [self heightForString:model.text font:model.font width:width] : ceil(model.font.lineHeight);
++ (CGSize)sizeForViewModel:(ComponentTextViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    CGFloat height = (model.multiline) ? [self heightForString:model.text font:model.font width:constrainedToSize.width] : ceil(model.font.lineHeight);
+    return CGSizeMake(constrainedToSize.width, height);
 }
 
-+ (CGFloat)estimatedHeightForViewModel:(ComponentTextViewModel *)model width:(CGFloat)width {
-    return [self heightForViewModel:model width:width];
++ (CGSize)estimatedSizeForViewModel:(ComponentTextViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    return [self sizeForViewModel:model constrainedToSize:constrainedToSize];
 }
 
 @end

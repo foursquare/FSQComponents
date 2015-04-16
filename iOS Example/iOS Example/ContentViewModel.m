@@ -52,7 +52,7 @@
     ComponentPhotoViewModel *model = [[ComponentPhotoViewModel alloc] initWithImage:contentModel.image];
     FSQComponentSpecification *specification = [[FSQComponentSpecification alloc] initWithViewModel:model viewClass:[ComponentPhotoView class]];
     specification.layoutType = FSQComponentLayoutTypeFixed;
-    specification.fixedWidthPercent = 0.3;
+    specification.widthPercentConstraint = 0.3;
     return specification;
 }
 

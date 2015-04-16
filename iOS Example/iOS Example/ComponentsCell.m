@@ -21,6 +21,8 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
         self.backgroundColor = [UIColor whiteColor];
+        self.separatorInset = UIEdgeInsetsZero;
+        self.layoutMargins = UIEdgeInsetsZero;
         
         self.componentsView = [[FSQComponentsView alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:self.componentsView];
@@ -62,13 +64,13 @@
 + (CGFloat)heightForModel:(FSQComponentsViewModel *)model width:(CGFloat)width {
     UIEdgeInsets insets = [self paddingInsets];
     CGFloat contentWidth = width - insets.left - insets.right;
-    return [FSQComponentsView heightForViewModel:model width:contentWidth] + insets.top + insets.bottom;
+    return [FSQComponentsView sizeForViewModel:model constrainedToSize:CGSizeMake(contentWidth, CGFLOAT_MAX)].height + insets.top + insets.bottom;
 }
 
 + (CGFloat)estimatedHeightForModel:(FSQComponentsViewModel *)model width:(CGFloat)width {
     UIEdgeInsets insets = [self paddingInsets];
     CGFloat contentWidth = width - insets.left - insets.right;
-    return [FSQComponentsView estimatedHeightForViewModel:model width:contentWidth] + insets.top + insets.bottom;
+    return [FSQComponentsView estimatedSizeForViewModel:model constrainedToSize:CGSizeMake(contentWidth, CGFLOAT_MAX)].height + insets.top + insets.bottom;
 }
 
 @end

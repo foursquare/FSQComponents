@@ -24,7 +24,7 @@
 
 - (void)configureWithViewModel:(ComponentHorizontalRuleViewModel *)model;
 
-+ (CGFloat)heightForViewModel:(ComponentHorizontalRuleViewModel *)model width:(CGFloat)width;
-+ (CGFloat)estimatedHeightForViewModel:(ComponentHorizontalRuleViewModel *)model width:(CGFloat)width;
++ (CGSize)sizeForViewModel:(ComponentHorizontalRuleViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
++ (CGSize)estimatedSizeForViewModel:(ComponentHorizontalRuleViewModel *)model constrainedToSize:(CGSize)constrainedToSize;
 
 @end
