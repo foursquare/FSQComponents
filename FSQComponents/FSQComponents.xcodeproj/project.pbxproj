@@ -68,7 +68,7 @@
 				7EA415051ADD9F65003192F4 /* FSQComponentButton.h */,
 				7EA415061ADD9F65003192F4 /* FSQComponentButton.m */,
 			);
-			name = Components;
+			path = Components;
 			sourceTree = "<group>";
 		};
 		7EA598DC1AC0968700E63B7F = {

@@ -10,14 +10,14 @@
 	<string>FSQComponents</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>4D498A8C150220387F1FB2590BE3FACFDA84AE4C</key>
+		<key>8E6284612AE7D1325F8D0888CEAD653CDD1D564C</key>
 		<string>github.com:foursquare/FSQComponents.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>FSQComponents.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>4D498A8C150220387F1FB2590BE3FACFDA84AE4C</key>
+		<key>8E6284612AE7D1325F8D0888CEAD653CDD1D564C</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>4D498A8C150220387F1FB2590BE3FACFDA84AE4C</string>
+	<string>8E6284612AE7D1325F8D0888CEAD653CDD1D564C</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>4D498A8C150220387F1FB2590BE3FACFDA84AE4C</string>
+			<string>8E6284612AE7D1325F8D0888CEAD653CDD1D564C</string>
 			<key>IDESourceControlWCCName</key>
 			<string>FSQComponents</string>
 		</dict>
