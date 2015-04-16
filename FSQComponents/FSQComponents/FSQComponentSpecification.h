@@ -65,24 +65,22 @@ typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
 @property (nonatomic) FSQComponentLayoutType layoutType;
 
 /**
- *  Specifies the width in points that the component should be given. This is
- *  only relevent if layoutType is set to FSQComponentLayoutTypeFixed.
+ *  The width in points that the component should be given. If layoutType is
+ *  FSQComponentLayoutTypeFlexible this is treated as a minimum width. If
+ *  layoutType is FSQComponentLayoutTypeFixed this is treated as the absolute
+ *  width.
  */
-@property (nonatomic) CGFloat fixedWidth;
+@property (nonatomic) CGFloat widthConstraint;
 
 /**
- *  Specifies the width as a percent of the container's total width that the
- *  component should be given. This is only relevent if layoutType is set to
- *  FSQComponentLayoutTypeFixed.
+ *  The width the component should be given as a percent of the total width of
+ *  the containing view. If layoutType is FSQComponentLayoutTypeFlexible this is
+ *  treated as a minimum width. If layoutType is FSQComponentLayoutTypeFixed
+ *  this is treated as the absolute width.
+ *
+ *  @note Only checked if widthConstraint is 0.0.
  */
-@property (nonatomic) CGFloat fixedWidthPercent;
-
-/**
- *  Specifies the minimum width the component should be given as a percent of
- *  the container's total width that the component should be given. This is only
- *  relevent if layoutType is set to FSQComponentLayoutTypeFlexible.
- */
-@property (nonatomic) CGFloat minimumWidthPercent;
+@property (nonatomic) CGFloat widthPercentConstraint;
 
 - (instancetype)initWithViewModel:(id)viewModel viewClass:(Class)viewClass;
 - (instancetype)initWithViewModel:(id)viewModel viewClass:(Class)viewClass insets:(UIEdgeInsets)insets NS_DESIGNATED_INITIALIZER;
