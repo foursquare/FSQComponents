@@ -8,9 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *  Used to control how a component is laid out.
+ */
 typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
+    /**
+     *  Specifies that the component should be provided
+     *  the full width of the containing view.
+     */
     FSQComponentLayoutTypeFull = 0,
+    /**
+     *  Specifies that the component can share a line
+     *  with other components. The minimumWidthPercent property are used to
+     *  control the layout of the component.
+     */
     FSQComponentLayoutTypeFlexible,
+    /**
+     *  Specifies that the component can share a line
+     *  with other components. The fixedWidth or fixedWidthPercent properties are
+     *  used to control the layout of the component.
+     */
     FSQComponentLayoutTypeFixed
 };
 
@@ -44,17 +61,6 @@ typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
 
 /**
  *  The type of layout desired for the component.
- *
- *  FSQComponentLayoutTypeFull specifies that the component should be provided
- *  the full width of the containing view.
- *
- *  FSQComponentLayoutTypeFlexible specifies that the component can share a line
- *  with other components. The minimumWidthPercent property are used to
- *  control the layout of the component.
- *
- *  FSQComponentLayoutTypeFixed specifies that the component can share a line
- *  with other components. The fixedWidth or fixedWidthPercent properties are
- *  used to control the layout of the component.
  */
 @property (nonatomic) FSQComponentLayoutType layoutType;
 
