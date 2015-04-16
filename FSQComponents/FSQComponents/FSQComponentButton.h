@@ -16,6 +16,11 @@
 @property (nonatomic) UIColor *backgroundColor;
 @property (nonatomic) CGFloat cornerRadius;
 
+@property (nonatomic) CGFloat heightConstraint;
+
+@property (nonatomic) CGFloat horizontalPadding;
+@property (nonatomic) CGFloat verticalPadding;
+
 - (instancetype)initWithImage:(UIImage *)image title:(NSString *)title titleColor:(UIColor *)titleColor;
 
 - (void)setImage:(UIImage *)image forState:(UIControlState)state;

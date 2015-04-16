@@ -60,31 +60,33 @@
     return self;
 }
 
-- (void)setImage:(UIImage *)image forState:(UIControlState)state {
-    if (image) {
-        self.imageDictionary[@(state)] = image;
+- (void)setObject:(id)object forDictionary:(NSMutableDictionary *)dictionary forState:(UIControlState)state {
+    if (object) {
+        for (NSNumber *controlState in [[self class] allControlStates]) {
+            if ((state & [controlState unsignedIntegerValue]) != 0) {
+                dictionary[controlState] = object;
+            }
+        }
     }
     else {
-        [self.imageDictionary removeObjectForKey:@(state)];
+        for (NSNumber *controlState in [[self class] allControlStates]) {
+            if ((state & [controlState unsignedIntegerValue]) != 0) {
+                [dictionary removeObjectForKey:controlState];
+            }
+        }
     }
+}
+
+- (void)setImage:(UIImage *)image forState:(UIControlState)state {
+    [self setObject:image forDictionary:self.imageDictionary forState:state];
 }
 
 - (void)setTitle:(NSString *)title forState:(UIControlState)state {
-    if (title) {
-        self.titleDictionary[@(state)] = title;
-    }
-    else {
-        [self.titleDictionary removeObjectForKey:@(state)];
-    }
+    [self setObject:title forDictionary:self.titleDictionary forState:state];
 }
 
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state {
-    if (color) {
-        self.titleColorDictionary[@(state)] = color;
-    }
-    else {
-        [self.titleColorDictionary removeObjectForKey:@(state)];
-    }
+    [self setObject:color forDictionary:self.titleColorDictionary forState:state];
 }
 
 - (UIImage *)imageForState:(UIControlState)state {
@@ -258,7 +260,16 @@
     });
     
     [buttonForSizing configureWithViewModel:model];
-    return [buttonForSizing sizeThatFits:constrainedToSize];
+    
+    CGSize size = [buttonForSizing sizeThatFits:constrainedToSize];
+    if (model.heightConstraint != 0.0) {
+        size.height = model.heightConstraint;
+    }
+    
+    size.width += 2.0 * model.horizontalPadding;
+    size.height += 2.0 * model.verticalPadding;
+    
+    return CGSizeMake(MIN(size.width, constrainedToSize.width), MIN(size.height, constrainedToSize.height));
 }
 
 + (CGSize)estimatedSizeForViewModel:(FSQComponentButtonModel *)model constrainedToSize:(CGSize)constrainedToSize {
