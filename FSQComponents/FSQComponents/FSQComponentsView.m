@@ -73,6 +73,11 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
         [self reset];
         [self setupViewsForModel:model];
     }
+    else {
+        for (UIView<FSQComposable> *view in self.views) {
+            [view prepareForReuse];
+        }
+    }
     
     for (NSInteger i = 0; i < self.views.count; ++i) {
         id viewModel = [model.componentSpecifications[i] viewModel];
@@ -118,9 +123,7 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
 }
 
 - (void)prepareForReuse {
-    for (UIView<FSQComposable> *view in self.views) {
-        [view prepareForReuse];
-    }
+    
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {

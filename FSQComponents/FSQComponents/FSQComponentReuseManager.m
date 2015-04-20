@@ -8,6 +8,8 @@
 
 #import "FSQComponentReuseManager.h"
 
+#import "FSQComposable.h"
+
 static const CGFloat kReusePoolLimit = 10;
 
 @implementation FSQComponentReuseManager
@@ -48,6 +50,7 @@ static const CGFloat kReusePoolLimit = 10;
     if (reusePool.count > 0) {
         view = [reusePool anyObject];
         [reusePool removeObject:view];
+        [view prepareForReuse];
     }
     else {
         view = [[viewClass alloc] initWithFrame:CGRectZero];
