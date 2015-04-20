@@ -23,6 +23,8 @@
         _viewModel = viewModel;
         _viewClass = viewClass;
         _insets = insets;
+        
+        _growthFactor = 1.0;
     }
     return self;
 }

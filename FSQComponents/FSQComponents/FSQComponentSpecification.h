@@ -83,6 +83,19 @@ typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
  */
 @property (nonatomic) CGFloat widthPercentConstraint;
 
+/**
+ *  This defines the ability for a FSQComponentLayoutTypeFlexible layoutType
+ *  item to grow. It accepts a unitless value that serves as a proportion. It
+ *  dictates what amount of available line space inside the container the item
+ *  should take up.
+ *  
+ *  If two flexible items live on the same line and have a growthFactor of 1,
+ *  they will have equal size inside the container. If you were to give one of
+ *  the components a growthFactor of 2, it would take up twice as much space as
+ *  the other.
+ */
+@property (nonatomic) CGFloat growthFactor;
+
 - (instancetype)initWithViewModel:(id)viewModel viewClass:(Class)viewClass;
 - (instancetype)initWithViewModel:(id)viewModel viewClass:(Class)viewClass insets:(UIEdgeInsets)insets NS_DESIGNATED_INITIALIZER;
 

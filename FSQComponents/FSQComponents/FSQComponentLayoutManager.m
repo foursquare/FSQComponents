@@ -89,6 +89,7 @@ static const CGFloat kStandardPadding = 10.0;
     
     CGFloat remainingWidth = width;
     NSInteger numberOfFlexibleItems = 0;
+    CGFloat totalGrowthFactor = 0.0;
     
     for (NSInteger i = 0; i < specifications.count; ++i) {
         FSQComponentSpecification *specification = specifications[i];
@@ -101,16 +102,16 @@ static const CGFloat kStandardPadding = 10.0;
         
         if (specification.layoutType == FSQComponentLayoutTypeFlexible) {
             numberOfFlexibleItems++;
+            totalGrowthFactor += specification.growthFactor;
         }
     }
     
-    CGFloat additionalWidth = (numberOfFlexibleItems > 0) ? floor(remainingWidth / numberOfFlexibleItems) : 0.0;
-    if (additionalWidth > 0.0) {
-        CGFloat finalWidth = remainingWidth - additionalWidth * (numberOfFlexibleItems - 1);
+    CGFloat widthPerGrowthFactor = (numberOfFlexibleItems > 0) ? floor(remainingWidth / totalGrowthFactor) : 0.0;
+    if (widthPerGrowthFactor > 0.0) {
         for (NSInteger i = 0; i < specifications.count; ++i) {
             FSQComponentSpecification *specification = specifications[i];
             if (specification.layoutType == FSQComponentLayoutTypeFlexible) {
-                requiredWidths[i] += (numberOfFlexibleItems == 1) ? finalWidth : additionalWidth;
+                requiredWidths[i] += round(widthPerGrowthFactor * specification.growthFactor);
                 numberOfFlexibleItems--;
             }
         }
