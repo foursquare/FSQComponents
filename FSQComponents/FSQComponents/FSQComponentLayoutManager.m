@@ -108,10 +108,13 @@ static const CGFloat kStandardPadding = 10.0;
     
     CGFloat widthPerGrowthFactor = (numberOfFlexibleItems > 0) ? floor(remainingWidth / totalGrowthFactor) : 0.0;
     if (widthPerGrowthFactor > 0.0) {
+        CGFloat allocatedWidth = 0.0;
         for (NSInteger i = 0; i < specifications.count; ++i) {
             FSQComponentSpecification *specification = specifications[i];
             if (specification.layoutType == FSQComponentLayoutTypeFlexible) {
-                requiredWidths[i] += round(widthPerGrowthFactor * specification.growthFactor);
+                CGFloat growthWidth = round(widthPerGrowthFactor * specification.growthFactor);
+                requiredWidths[i] += (numberOfFlexibleItems == 1) ? remainingWidth - allocatedWidth : growthWidth;
+                allocatedWidth += growthWidth;
                 numberOfFlexibleItems--;
             }
         }
