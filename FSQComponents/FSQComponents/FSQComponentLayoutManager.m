@@ -66,7 +66,7 @@ static const CGFloat kStandardPadding = 10.0;
             break;
         case FSQComponentLayoutTypeFlexible:
         case FSQComponentLayoutTypeFixed:
-            requiredSpace = (specification.widthConstraint != 0.0) ? specification.widthConstraint : ceil(specification.widthPercentConstraint * width);
+            requiredSpace = (specification.widthConstraint != 0.0) ? specification.widthConstraint : round(specification.widthPercentConstraint * width);
             break;
     }
     return MIN(requiredSpace, width);
@@ -90,21 +90,13 @@ static const CGFloat kStandardPadding = 10.0;
     CGFloat remainingWidth = width;
     NSInteger numberOfFlexibleItems = 0;
     
-    CGFloat contentWidth = width;
-    for (NSInteger i = 0; i < specifications.count; ++i) {
-        FSQComponentSpecification *specification = specifications[i];
-        CGFloat leftInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:(i == 0)];
-        CGFloat rightInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:(i == specifications.count - 1)];
-        contentWidth -= leftInset + rightInset;
-    }
-    
     for (NSInteger i = 0; i < specifications.count; ++i) {
         FSQComponentSpecification *specification = specifications[i];
         
         CGFloat leftInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:(i == 0)];
         CGFloat rightInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:(i == specifications.count - 1)];
         
-        requiredWidths[i] = [self layoutWidthForSpecification:specification width:contentWidth] + leftInset + rightInset;
+        requiredWidths[i] = [self layoutWidthForSpecification:specification width:width] + leftInset + rightInset;
         remainingWidth -= requiredWidths[i];
         
         if (specification.layoutType == FSQComponentLayoutTypeFlexible) {
@@ -147,10 +139,7 @@ static const CGFloat kStandardPadding = 10.0;
     NSMutableArray *frames = [[NSMutableArray alloc] init];
     
     __block CGFloat yOrigin = 0.0;
-    
-    __block CGFloat currentFixedWidthAllocated = 0.0;
-    __block CGFloat currentPercentWidthAllocated = 0.0;
-    __block CGFloat currentLineInsetsAllocated = 0.0;
+    __block CGFloat currentWidthAllocated = 0.0;
     
     NSMutableArray *pendingSpecifications = [[NSMutableArray alloc] init];
     
@@ -167,9 +156,7 @@ static const CGFloat kStandardPadding = 10.0;
         [frames addObjectsFromArray:lineFrames];
         [pendingSpecifications removeAllObjects];
         
-        currentFixedWidthAllocated = 0.0;
-        currentPercentWidthAllocated = 0.0;
-        currentLineInsetsAllocated = 0.0;
+        currentWidthAllocated = 0.0;
     };
     
     for (NSInteger i = 0; i < model.componentSpecifications.count; ++i) {
@@ -198,31 +185,19 @@ static const CGFloat kStandardPadding = 10.0;
             case FSQComponentLayoutTypeFlexible:
             case FSQComponentLayoutTypeFixed: {
                 CGFloat leftInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:(pendingSpecifications.count == 0)];
-                CGFloat rightInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:NO];
-                
                 CGFloat leftEdgeInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:YES];
+                
+                CGFloat rightInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:NO];
                 CGFloat rightEdgeInset = [self smartAdjustedRightInsetForViewModel:model insets:specification.insets isEdgeElement:YES];
                 
-                CGFloat fixedWidth = 0.0;
-                CGFloat percentWidth = 0.0;
-                if (specification.widthConstraint) {
-                    fixedWidth = MIN(specification.widthConstraint, width - leftEdgeInset - rightEdgeInset);
-                }
-                else {
-                    percentWidth = MIN(specification.widthPercentConstraint, 1.0);
-                }
+                CGFloat layoutWidth = [self layoutWidthForSpecification:specification width:width];
                 
-                CGFloat contentWidth = width - currentLineInsetsAllocated - leftInset - rightEdgeInset;
-                CGFloat requiredWidth = currentFixedWidthAllocated + fixedWidth + ceil(contentWidth * (currentPercentWidthAllocated + percentWidth));
-                
-                if (requiredWidth > contentWidth) {
+                if (currentWidthAllocated + layoutWidth + leftInset + rightEdgeInset > width) {
                     flushLine();
+                    leftInset = leftEdgeInset;
                 }
                 
-                currentFixedWidthAllocated += fixedWidth;
-                currentPercentWidthAllocated += percentWidth;
-                currentLineInsetsAllocated += leftInset + rightInset;
-                
+                currentWidthAllocated += layoutWidth + leftInset + rightInset;
                 [pendingSpecifications addObject:specification];
                 break;
             }
