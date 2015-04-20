@@ -7,7 +7,6 @@
 //
 
 #import "FSQComponentSpecification.h"
-#import <objc/runtime.h>
 
 #import "FSQComposable.h"
 #import "FSQComponentsView.h"
@@ -20,7 +19,7 @@
 
 - (instancetype)initWithViewModel:(id)viewModel viewClass:(Class)viewClass insets:(UIEdgeInsets)insets {
     if ((self = [super init])) {
-        NSAssert(class_conformsToProtocol(viewClass, @protocol(FSQComposable)), @"Attempting to create a FSQComponentSpecification with an invalid viewClass.");
+        NSAssert([viewClass conformsToProtocol:@protocol(FSQComposable)], @"Attempting to create a FSQComponentSpecification with an invalid viewClass.");
         _viewModel = viewModel;
         _viewClass = viewClass;
         _insets = insets;
