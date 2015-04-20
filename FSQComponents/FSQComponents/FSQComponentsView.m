@@ -26,7 +26,7 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
 - (instancetype)initWithComponentSpecifications:(NSArray *)componentSpecifications smartInsetsAppliesToEdges:(BOOL)smartInsetsAppliesToEdges {
     if ((self = [super init])) {
         _componentSpecifications = [componentSpecifications copy];
-        _smartInsetsAppliesToEdges = YES;
+        _smartInsetsAppliesToEdges = smartInsetsAppliesToEdges;
         
         NSMutableArray *reuseComponents = [[NSMutableArray alloc] init];
         for (FSQComponentSpecification *specification in componentSpecifications) {
