@@ -78,7 +78,7 @@ extern const UIEdgeInsets kFSQComponentSmartInsets;
  *  @param model The view model object used to set up the component.
  *
  *  @note The model object should be the same instance passed to
- *  [FSQComponentsView sizeForViewModel:width:].
+ *  [FSQComponentsView sizeForViewModel:constrainedToSize:].
  */
 - (void)configureWithViewModel:(FSQComponentsViewModel *)model;
 

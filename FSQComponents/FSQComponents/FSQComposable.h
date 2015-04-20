@@ -31,7 +31,7 @@
  *  @param model The view model object used to set up the component.
  *
  *  @note The model object will be the same instance passed to
- *  [FSQComposable sizeForViewModel:width:].
+ *  [FSQComposable sizeForViewModel:constrainedToSize:].
  */
 - (void)configureWithViewModel:(id)model;
 
