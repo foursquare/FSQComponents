@@ -31,7 +31,7 @@
  *  @param model The view model object used to set up the component.
  *
  *  @note The model object will be the same instance passed to
- *  [FSQComposable heightForViewModel:width:].
+ *  [FSQComposable sizeForViewModel:width:].
  */
 - (void)configureWithViewModel:(id)model;
 
@@ -69,10 +69,7 @@
 + (CGSize)estimatedSizeForViewModel:(id)model constrainedToSize:(CGSize)constrainedToSize;
 
 /**
- *  If prepareForReuse is called on an instance of FSQComponentsView, the call
- *  is propogated to each individual component. Individual component views are
- *  placed in a reuse pool and this method should be used to prepare them for
- *  reuse.
+ *  Prepares a reusable component for reuse by FSQComponentsView.
  *
  *  @note For performance reasons, you should only reset attributes of the view
  *  that are not related to content, for example, alpha, editing, and selection

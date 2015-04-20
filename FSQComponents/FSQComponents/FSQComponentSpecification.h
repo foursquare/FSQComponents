@@ -65,17 +65,18 @@ typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
 @property (nonatomic) FSQComponentLayoutType layoutType;
 
 /**
- *  The width in points that the component should be given. If layoutType is
- *  FSQComponentLayoutTypeFlexible this is treated as a minimum width. If
- *  layoutType is FSQComponentLayoutTypeFixed this is treated as the absolute
- *  width.
+ *  The width in points that the component should be given, not including
+ *  insets. If layoutType is FSQComponentLayoutTypeFlexible this is treated as a
+ *  minimum width for the component. If layoutType is
+ *  FSQComponentLayoutTypeFixed this is treated as the absolute width.
  */
 @property (nonatomic) CGFloat widthConstraint;
 
 /**
  *  The width the component should be given as a percent of the total width of
- *  the containing view. If layoutType is FSQComponentLayoutTypeFlexible this is
- *  treated as a minimum width. If layoutType is FSQComponentLayoutTypeFixed
+ *  the containing view, not including insets. If layoutType is
+ *  FSQComponentLayoutTypeFlexible this is treated as a minimum width for the
+ *  component, including insets. If layoutType is FSQComponentLayoutTypeFixed
  *  this is treated as the absolute width.
  *
  *  @note Only checked if widthConstraint is 0.0.

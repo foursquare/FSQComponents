@@ -78,7 +78,7 @@ extern const UIEdgeInsets kFSQComponentSmartInsets;
  *  @param model The view model object used to set up the component.
  *
  *  @note The model object should be the same instance passed to
- *  [FSQComponentsView heightForViewModel:width:].
+ *  [FSQComponentsView sizeForViewModel:width:].
  */
 - (void)configureWithViewModel:(FSQComponentsViewModel *)model;
 
@@ -105,13 +105,8 @@ extern const UIEdgeInsets kFSQComponentSmartInsets;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated;
 
 /**
- *  This call is propogated to each individual component and they are then
- *  placed in a global reuse pool.
- *
- *  @note For performance reasons, you should only reset attributes of the view
- *  that are not related to content, for example, alpha, editing, and selection
- *  state. The component's configureWithViewModel: should always reset all
- *  content.
+ *  Prepares a the view for reuse if used inside a table view or collection
+ *  view.
  */
 - (void)prepareForReuse;
 
