@@ -96,6 +96,16 @@ typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
  */
 @property (nonatomic) CGFloat growthFactor;
 
+/**
+ *  Forces the component to start a new line.
+ */
+@property (nonatomic) BOOL startsNewLine;
+
+/**
+ *  Forces the component to end the current line.
+ */
+@property (nonatomic) BOOL endsCurrentLine;
+
 - (instancetype)initWithViewModel:(id)viewModel viewClass:(Class)viewClass;
 - (instancetype)initWithViewModel:(id)viewModel viewClass:(Class)viewClass insets:(UIEdgeInsets)insets NS_DESIGNATED_INITIALIZER;
 

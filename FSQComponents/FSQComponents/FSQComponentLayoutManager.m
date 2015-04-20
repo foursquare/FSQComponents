@@ -163,6 +163,10 @@ static const CGFloat kStandardPadding = 10.0;
     for (NSInteger i = 0; i < model.componentSpecifications.count; ++i) {
         FSQComponentSpecification *specification = model.componentSpecifications[i];
         
+        if (specification.startsNewLine && pendingSpecifications.count > 0) {
+            flushLine();
+        }
+        
         switch (specification.layoutType) {
             case FSQComponentLayoutTypeFull: {
                 if (pendingSpecifications.count > 0) {
@@ -200,6 +204,11 @@ static const CGFloat kStandardPadding = 10.0;
                 
                 currentWidthAllocated += layoutWidth + leftInset + rightInset;
                 [pendingSpecifications addObject:specification];
+                
+                if (specification.endsCurrentLine) {
+                    flushLine();
+                }
+                
                 break;
             }
         }
