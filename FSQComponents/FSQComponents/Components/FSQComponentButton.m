@@ -9,6 +9,47 @@
 #import "FSQComponentButton.h"
 #import <objc/runtime.h>
 
+static NSArray* allControlStates() {
+    static dispatch_once_t predicate;
+    static NSArray *controlStates;
+    dispatch_once(&predicate, ^() {
+        controlStates = @[
+            @(UIControlStateNormal),
+            @(UIControlStateHighlighted),
+            @(UIControlStateDisabled),
+            @(UIControlStateSelected),
+            @(UIControlStateApplication)
+        ];
+    });
+    return controlStates;
+}
+
+static NSArray* allControlEvents() {
+    static dispatch_once_t predicate;
+    static NSArray *controlEvents;
+    dispatch_once(&predicate, ^() {
+        controlEvents = @[
+            @(UIControlEventTouchDown),
+            @(UIControlEventTouchDownRepeat),
+            @(UIControlEventTouchDragInside),
+            @(UIControlEventTouchDragOutside),
+            @(UIControlEventTouchDragEnter),
+            @(UIControlEventTouchDragExit),
+            @(UIControlEventTouchUpInside),
+            @(UIControlEventTouchUpOutside),
+            @(UIControlEventTouchCancel),
+            @(UIControlEventValueChanged),
+            @(UIControlEventEditingDidBegin),
+            @(UIControlEventEditingChanged),
+            @(UIControlEventEditingDidEnd),
+            @(UIControlEventEditingDidEndOnExit),
+            @(UIControlEventApplicationReserved)
+        ];
+    });
+    return controlEvents;
+}
+
+
 #pragma mark - FSQComponentButtonModel -
 
 @interface FSQTargetSelectorPair : NSObject
@@ -66,7 +107,7 @@
             dictionary[@(state)] = object;
         }
         else {
-            for (NSNumber *controlState in [[self class] allControlStates]) {
+            for (NSNumber *controlState in allControlStates()) {
                 if ((state & [controlState unsignedIntegerValue]) != 0) {
                     dictionary[controlState] = object;
                 }
@@ -78,7 +119,7 @@
             [dictionary removeObjectForKey:@(state)];
         }
         else {
-            for (NSNumber *controlState in [[self class] allControlStates]) {
+            for (NSNumber *controlState in allControlStates()) {
                 if ((state & [controlState unsignedIntegerValue]) != 0) {
                     [dictionary removeObjectForKey:controlState];
                 }
@@ -114,7 +155,7 @@
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents {
     FSQTargetSelectorPair *targetSelector = [[FSQTargetSelectorPair alloc] initWithTarget:target selector:action];
     
-    for (NSNumber *controlEvent in [[self class] allControlEvents]) {
+    for (NSNumber *controlEvent in allControlEvents()) {
         if ((controlEvents & [controlEvent unsignedIntegerValue]) != 0) {
             NSMutableArray *actions = self.actionsDictionary[controlEvent];
             if (actions == nil) {
@@ -128,7 +169,7 @@
 }
 
 - (void)removeTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents {
-    for (NSNumber *controlEvent in [[self class] allControlEvents]) {
+    for (NSNumber *controlEvent in allControlEvents()) {
         if ((controlEvents & [controlEvent unsignedIntegerValue]) != 0) {
             NSMutableArray *actions = self.actionsDictionary[@(controlEvents)];
             NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
@@ -142,48 +183,6 @@
             [actions removeObjectsAtIndexes:indexSet];
         }
     }
-}
-
-#pragma mark - Class methods
-
-+ (NSArray *)allControlStates {
-    static dispatch_once_t predicate;
-    static NSArray *controlStates;
-    dispatch_once(&predicate, ^() {
-        controlStates = @[
-            @(UIControlStateNormal),
-            @(UIControlStateHighlighted),
-            @(UIControlStateDisabled),
-            @(UIControlStateSelected),
-            @(UIControlStateApplication)
-        ];
-    });
-    return controlStates;
-}
-
-+ (NSArray *)allControlEvents {
-    static dispatch_once_t predicate;
-    static NSArray *controlEvents;
-    dispatch_once(&predicate, ^() {
-        controlEvents = @[
-            @(UIControlEventTouchDown),
-            @(UIControlEventTouchDownRepeat),
-            @(UIControlEventTouchDragInside),
-            @(UIControlEventTouchDragOutside),
-            @(UIControlEventTouchDragEnter),
-            @(UIControlEventTouchDragExit),
-            @(UIControlEventTouchUpInside),
-            @(UIControlEventTouchUpOutside),
-            @(UIControlEventTouchCancel),
-            @(UIControlEventValueChanged),
-            @(UIControlEventEditingDidBegin),
-            @(UIControlEventEditingChanged),
-            @(UIControlEventEditingDidEnd),
-            @(UIControlEventEditingDidEndOnExit),
-            @(UIControlEventApplicationReserved)
-        ];
-    });
-    return controlEvents;
 }
 
 @end
@@ -205,6 +204,36 @@
     self.backgroundColor = model.backgroundColor;
     self.layer.cornerRadius = model.cornerRadius;
     
+    [self resetState];
+    [self configureStateWithModel:model];
+}
+
+- (void)prepareForReuse {
+    self.fsqComponentsModel = nil;
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    
+}
+
+#pragma mark - Private
+
+- (void)resetState {
+    for (NSNumber *controlState in allControlStates()) {
+        UIControlState state = [controlState unsignedIntegerValue];
+        [self setImage:nil forState:state];
+        [self setTitle:nil forState:state];
+        [self setTitleColor:nil forState:state];
+    }
+    
+    [self removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+}
+
+- (void)configureStateWithModel:(FSQComponentButtonModel *)model {
     for (NSNumber *controlState in model.imageDictionary.allKeys) {
         UIControlState state = [controlState unsignedIntegerValue];
         [self setImage:[model imageForState:state] forState:state];
@@ -228,29 +257,6 @@
         }
     }
 }
-
-- (void)prepareForReuse {
-    for (NSNumber *controlState in [[self.fsqComponentsModel class] allControlStates]) {
-        UIControlState state = [controlState unsignedIntegerValue];
-        [self setImage:nil forState:state];
-        [self setTitle:nil forState:state];
-        [self setTitleColor:nil forState:state];
-    }
-    
-    [self removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    
-    self.fsqComponentsModel = nil;
-}
-
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
-    
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    
-}
-
-#pragma mark - Private
 
 - (void)setFsqComponentsModel:(FSQComponentButtonModel *)fsqComponentsModel {
     return objc_setAssociatedObject(self, @selector(fsqComponentsModel), fsqComponentsModel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
