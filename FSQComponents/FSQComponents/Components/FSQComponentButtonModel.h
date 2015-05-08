@@ -1,5 +1,5 @@
 //
-//  FSQComponentButton.h
+//  FSQComponentButtonModel.h
 //  iOS Example
 //
 //  Created by Cameron Mulhern on 4/14/15.

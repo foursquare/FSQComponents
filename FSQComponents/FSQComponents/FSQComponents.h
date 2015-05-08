@@ -10,4 +10,4 @@
 #import "FSQComponentsView.h"
 #import "FSQComposable.h"
 
-#import "FSQComponentButton.h"
+#import "FSQComponentButtonModel.h"

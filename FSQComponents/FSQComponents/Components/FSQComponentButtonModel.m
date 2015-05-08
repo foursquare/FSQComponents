@@ -1,12 +1,12 @@
 //
-//  FSQComponentButton.m
+//  FSQComponentButtonModel.m
 //  iOS Example
 //
 //  Created by Cameron Mulhern on 4/14/15.
 //  Copyright (c) 2015 Cameron Mulhern. All rights reserved.
 //
 
-#import "FSQComponentButton.h"
+#import "FSQComponentButtonModel.h"
 #import <objc/runtime.h>
 
 static NSArray* allControlStates() {
@@ -133,7 +133,7 @@ static NSArray* allControlEvents() {
 }
 
 - (void)setTitle:(NSString *)title forState:(UIControlState)state {
-    [self setObject:title forDictionary:self.titleDictionary forState:state];
+    [self setObject:[title copy] forDictionary:self.titleDictionary forState:state];
 }
 
 - (void)setTitleColor:(UIColor *)color forState:(UIControlState)state {
@@ -191,14 +191,14 @@ static NSArray* allControlEvents() {
 
 @interface UIButton (FSQComponentButtonPrivate)
 
-@property (nonatomic) FSQComponentButtonModel *fsqComponentsModel;
+@property (nonatomic) FSQComponentButtonModel *fsqComponentButtonModel;
 
 @end
 
 @implementation UIButton (FSQComponentButton)
 
 - (void)configureWithViewModel:(FSQComponentButtonModel *)model {
-    self.fsqComponentsModel = model;
+    self.fsqComponentButtonModel = model;
     
     self.titleLabel.font = model.font;
     self.backgroundColor = model.backgroundColor;
@@ -209,7 +209,7 @@ static NSArray* allControlEvents() {
 }
 
 - (void)prepareForReuse {
-    self.fsqComponentsModel = nil;
+    self.fsqComponentButtonModel = nil;
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
@@ -258,12 +258,12 @@ static NSArray* allControlEvents() {
     }
 }
 
-- (void)setFsqComponentsModel:(FSQComponentButtonModel *)fsqComponentsModel {
-    return objc_setAssociatedObject(self, @selector(fsqComponentsModel), fsqComponentsModel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setFsqComponentButtonModel:(FSQComponentButtonModel *)fsqComponentButtonModel {
+    return objc_setAssociatedObject(self, @selector(fsqComponentButtonModel), fsqComponentButtonModel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (FSQComponentButtonModel *)fsqComponentsModel {
-    return objc_getAssociatedObject(self, @selector(fsqComponentsModel));
+- (FSQComponentButtonModel *)fsqComponentButtonModel {
+    return objc_getAssociatedObject(self, @selector(fsqComponentButtonModel));
 }
 
 #pragma mark - Class methods
@@ -272,7 +272,7 @@ static NSArray* allControlEvents() {
     static dispatch_once_t predicate;
     static UIButton *buttonForSizing;
     dispatch_once(&predicate, ^() {
-        buttonForSizing = [[UIButton alloc] initWithFrame:CGRectZero];
+        buttonForSizing = [[self alloc] initWithFrame:CGRectZero];
     });
     
     [buttonForSizing configureWithViewModel:model];
