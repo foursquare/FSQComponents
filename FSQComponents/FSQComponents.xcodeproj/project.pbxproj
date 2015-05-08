@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7EA415071ADD9F65003192F4 /* FSQComponentButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EA415051ADD9F65003192F4 /* FSQComponentButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7EA415081ADD9F65003192F4 /* FSQComponentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA415061ADD9F65003192F4 /* FSQComponentButton.m */; };
+		7E9B40DE1AFD43EF00FF6498 /* FSQComponentLabelModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9B40DC1AFD43EF00FF6498 /* FSQComponentLabelModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E9B40DF1AFD43EF00FF6498 /* FSQComponentLabelModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B40DD1AFD43EF00FF6498 /* FSQComponentLabelModel.m */; };
+		7EA415071ADD9F65003192F4 /* FSQComponentButtonModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EA415051ADD9F65003192F4 /* FSQComponentButtonModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EA415081ADD9F65003192F4 /* FSQComponentButtonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA415061ADD9F65003192F4 /* FSQComponentButtonModel.m */; };
 		7EA598E91AC0968700E63B7F /* FSQComponents.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7EA598E81AC0968700E63B7F /* FSQComponents.h */; };
 		7EA5994A1AC0981800E63B7F /* FSQComponentLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA599421AC0981800E63B7F /* FSQComponentLayoutManager.m */; };
 		7EA5994B1AC0981800E63B7F /* FSQComponentReuseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA599441AC0981800E63B7F /* FSQComponentReuseManager.m */; };
@@ -36,8 +38,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7EA415051ADD9F65003192F4 /* FSQComponentButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSQComponentButton.h; sourceTree = "<group>"; };
-		7EA415061ADD9F65003192F4 /* FSQComponentButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSQComponentButton.m; sourceTree = "<group>"; };
+		7E9B40DC1AFD43EF00FF6498 /* FSQComponentLabelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSQComponentLabelModel.h; sourceTree = "<group>"; };
+		7E9B40DD1AFD43EF00FF6498 /* FSQComponentLabelModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSQComponentLabelModel.m; sourceTree = "<group>"; };
+		7EA415051ADD9F65003192F4 /* FSQComponentButtonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSQComponentButtonModel.h; sourceTree = "<group>"; };
+		7EA415061ADD9F65003192F4 /* FSQComponentButtonModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSQComponentButtonModel.m; sourceTree = "<group>"; };
 		7EA598E51AC0968700E63B7F /* libFSQComponents.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFSQComponents.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EA598E81AC0968700E63B7F /* FSQComponents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSQComponents.h; sourceTree = "<group>"; };
 		7EA599411AC0981800E63B7F /* FSQComponentLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSQComponentLayoutManager.h; sourceTree = "<group>"; };
@@ -65,8 +69,10 @@
 		7EA415041ADD9F5D003192F4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				7EA415051ADD9F65003192F4 /* FSQComponentButton.h */,
-				7EA415061ADD9F65003192F4 /* FSQComponentButton.m */,
+				7EA415051ADD9F65003192F4 /* FSQComponentButtonModel.h */,
+				7EA415061ADD9F65003192F4 /* FSQComponentButtonModel.m */,
+				7E9B40DC1AFD43EF00FF6498 /* FSQComponentLabelModel.h */,
+				7E9B40DD1AFD43EF00FF6498 /* FSQComponentLabelModel.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -115,9 +121,10 @@
 				7EA599711AC09A4D00E63B7F /* FSQComponents.h in Headers */,
 				7EA599741AC09A4D00E63B7F /* FSQComponentSpecification.h in Headers */,
 				7EA599751AC09A4D00E63B7F /* FSQComponentsView.h in Headers */,
+				7E9B40DE1AFD43EF00FF6498 /* FSQComponentLabelModel.h in Headers */,
 				7EA599761AC09A4D00E63B7F /* FSQComposable.h in Headers */,
 				7EA599721AC09A4D00E63B7F /* FSQComponentLayoutManager.h in Headers */,
-				7EA415071ADD9F65003192F4 /* FSQComponentButton.h in Headers */,
+				7EA415071ADD9F65003192F4 /* FSQComponentButtonModel.h in Headers */,
 				7EA599731AC09A4D00E63B7F /* FSQComponentReuseManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -179,11 +186,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EA415081ADD9F65003192F4 /* FSQComponentButton.m in Sources */,
+				7EA415081ADD9F65003192F4 /* FSQComponentButtonModel.m in Sources */,
 				7EA5994C1AC0981800E63B7F /* FSQComponentSpecification.m in Sources */,
 				7EA5994A1AC0981800E63B7F /* FSQComponentLayoutManager.m in Sources */,
 				7EA5994B1AC0981800E63B7F /* FSQComponentReuseManager.m in Sources */,
 				7EA5994D1AC0981800E63B7F /* FSQComponentsView.m in Sources */,
+				7E9B40DF1AFD43EF00FF6498 /* FSQComponentLabelModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
