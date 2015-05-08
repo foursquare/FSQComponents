@@ -81,7 +81,9 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
     
     for (NSInteger i = 0; i < self.views.count; ++i) {
         id viewModel = [model.componentSpecifications[i] viewModel];
-        [self.views[i] configureWithViewModel:viewModel];
+        UIView<FSQComposable> *view = self.views[i];
+        [view configureWithViewModel:viewModel];
+        [view setNeedsLayout];
     }
     
     [self setNeedsLayout];
