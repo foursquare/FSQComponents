@@ -151,13 +151,34 @@ static const CGFloat kStandardPadding = 10.0;
         BOOL isTopLine = (frames.count == 0);
         BOOL isBottomLine = (frames.count + pendingSpecifications.count == model.componentSpecifications.count);
         NSArray *lineFrames = [self componentLayoutInfoForLineWithViewModel:model specifications:pendingSpecifications width:width top:yOrigin isTopLine:isTopLine isBottomLine:isBottomLine layoutBlock:layoutBlock];
+        CGFloat lineHeight = 0.0;
         for (NSInteger i = 0; i < lineFrames.count; ++i) {
             FSQComponentLayoutInfo info;
             [lineFrames[i] getValue:&info];
             yOrigin = MAX(yOrigin, CGRectGetMaxY(info.frame));
+            lineHeight = MAX(lineHeight, info.frame.size.height);
         }
         
-        [frames addObjectsFromArray:lineFrames];
+        // Vertical alignment
+        for (int i = 0; i < lineFrames.count; ++i) {
+            FSQComponentLayoutInfo info;
+            [lineFrames[i] getValue:&info];
+            FSQComponentSpecification *spec = pendingSpecifications[i];
+            CGFloat heightDifference = (lineHeight - info.frame.size.height);
+            switch (spec.verticalAlignment) {
+                case FSQComponentVerticalAlignmentTop:
+                    // Default
+                    break;
+                case FSQComponentVerticalAlignmentCenter:
+                    info.frame.origin = CGPointMake(info.frame.origin.x, info.frame.origin.y + heightDifference / 2.0);
+                    break;
+                case FSQComponentVerticalAlignmentBottom:
+                    info.frame.origin = CGPointMake(info.frame.origin.x, info.frame.origin.y + heightDifference);
+                    break;
+            }
+            [frames addObject:[NSValue valueWithBytes:&info objCType:@encode(FSQComponentLayoutInfo)]];
+        }
+        
         [pendingSpecifications removeAllObjects];
         
         currentWidthAllocated = 0.0;

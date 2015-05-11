@@ -32,6 +32,15 @@ typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
 };
 
 /**
+ *  Used to control the vertical alignment of multiple components on a single line.
+ */
+typedef NS_ENUM(NSUInteger, FSQComponentVerticalAlignment) {
+    FSQComponentVerticalAlignmentTop = 0,
+    FSQComponentVerticalAlignmentCenter,
+    FSQComponentVerticalAlignmentBottom
+};
+
+/**
  *  FSQComponentSpecification is the model object that specifies an individual
  *  component in the hierarchy of an FSQComponentsView.
  *
@@ -63,6 +72,11 @@ typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
  *  The type of layout desired for the component.
  */
 @property (nonatomic) FSQComponentLayoutType layoutType;
+
+/**
+ *  The vertical alignment desired for the component.
+ */
+@property (nonatomic) FSQComponentVerticalAlignment verticalAlignment;
 
 /**
  *  The width in points that the component should be given, not including
