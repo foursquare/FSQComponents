@@ -9,6 +9,7 @@
 #import "MainViewController.h"
 
 #import "LayoutExampleViewController.h"
+#import "StackExampleViewController.h"
 #import "TableViewController.h"
 
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -26,8 +27,8 @@
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         self.title = @"Examples";
         
-        self.exampleViewControllerTitles = @[@"Content Example", @"Layout Example"];
-        self.exampleViewControllerClasses = @[[TableViewController class], [LayoutExampleViewController class]];
+        self.exampleViewControllerTitles = @[@"Content Example", @"Layout Example", @"Stack Example"];
+        self.exampleViewControllerClasses = @[[TableViewController class], [LayoutExampleViewController class], [StackExampleViewController class]];
     }
     return self;
 }

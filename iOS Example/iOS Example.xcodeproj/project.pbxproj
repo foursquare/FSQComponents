@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E9B40F61B0156AD00FF6498 /* StackExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B40F51B0156AD00FF6498 /* StackExampleViewController.m */; };
+		7E9B40FC1B01576100FF6498 /* ComponentColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9B40FB1B01576100FF6498 /* ComponentColorView.m */; };
 		7EA4150B1AE01D0B003192F4 /* LayoutExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4150A1AE01D0B003192F4 /* LayoutExampleViewController.m */; };
 		7EA4150E1AE01E28003192F4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4150D1AE01E28003192F4 /* MainViewController.m */; };
 		7EA5990E1AC096A500E63B7F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA5990D1AC096A500E63B7F /* main.m */; };
@@ -25,6 +27,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7E9B40F41B0156AD00FF6498 /* StackExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackExampleViewController.h; sourceTree = "<group>"; };
+		7E9B40F51B0156AD00FF6498 /* StackExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackExampleViewController.m; sourceTree = "<group>"; };
+		7E9B40FA1B01576100FF6498 /* ComponentColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentColorView.h; sourceTree = "<group>"; };
+		7E9B40FB1B01576100FF6498 /* ComponentColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentColorView.m; sourceTree = "<group>"; };
 		7EA415091AE01D0B003192F4 /* LayoutExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutExampleViewController.h; sourceTree = "<group>"; };
 		7EA4150A1AE01D0B003192F4 /* LayoutExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutExampleViewController.m; sourceTree = "<group>"; };
 		7EA4150C1AE01E28003192F4 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -97,6 +103,8 @@
 				7EA599601AC098E500E63B7F /* TableViewController.m */,
 				7EA415091AE01D0B003192F4 /* LayoutExampleViewController.h */,
 				7EA4150A1AE01D0B003192F4 /* LayoutExampleViewController.m */,
+				7E9B40F41B0156AD00FF6498 /* StackExampleViewController.h */,
+				7E9B40F51B0156AD00FF6498 /* StackExampleViewController.m */,
 				7EA599571AC098E500E63B7F /* ContentModel.h */,
 				7EA599581AC098E500E63B7F /* ContentModel.m */,
 				7EA599591AC098E500E63B7F /* ContentViewModel.h */,
@@ -136,6 +144,8 @@
 				7EA599541AC098E500E63B7F /* ComponentPhotoView.m */,
 				7EA599551AC098E500E63B7F /* ComponentTextView.h */,
 				7EA599561AC098E500E63B7F /* ComponentTextView.m */,
+				7E9B40FA1B01576100FF6498 /* ComponentColorView.h */,
+				7E9B40FB1B01576100FF6498 /* ComponentColorView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -224,9 +234,11 @@
 				7EA5996C1AC098E500E63B7F /* TableViewController.m in Sources */,
 				7EA599661AC098E500E63B7F /* ComponentTextView.m in Sources */,
 				7EA5996D1AC098E500E63B7F /* ViewController.m in Sources */,
+				7E9B40F61B0156AD00FF6498 /* StackExampleViewController.m in Sources */,
 				7EA599691AC098E500E63B7F /* ComponentsCell.m in Sources */,
 				7EA4150E1AE01E28003192F4 /* MainViewController.m in Sources */,
 				7EA599651AC098E500E63B7F /* ComponentPhotoView.m in Sources */,
+				7E9B40FC1B01576100FF6498 /* ComponentColorView.m in Sources */,
 				7EA599681AC098E500E63B7F /* ContentViewModel.m in Sources */,
 				7EA4150B1AE01D0B003192F4 /* LayoutExampleViewController.m in Sources */,
 				7EA599671AC098E500E63B7F /* ContentModel.m in Sources */,
