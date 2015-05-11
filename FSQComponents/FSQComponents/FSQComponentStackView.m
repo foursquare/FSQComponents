@@ -55,6 +55,9 @@
         view = [[FSQComponentReuseManager shared] dequeueViewForClass:viewClass];
         [self insertSubview:view atIndex:index];
     }
+    else {
+        [view prepareForReuse];
+    }
     
     return view;
 }
@@ -68,8 +71,7 @@
 }
 
 - (void)prepareForReuse {
-    [self.bottomView prepareForReuse];
-    [self.topView prepareForReuse];
+    
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
