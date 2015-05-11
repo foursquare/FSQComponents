@@ -12,6 +12,30 @@
 
 static const CGFloat kStandardPadding = 10.0;
 
+static CGFloat screenScale() {
+    static dispatch_once_t predicate;
+    static CGFloat scale;
+    dispatch_once(&predicate, ^() {
+        scale = [[UIScreen mainScreen] scale];
+    });
+    return scale;
+}
+
+static CGFloat pixelFloor(CGFloat value) {
+    CGFloat scale = screenScale();
+    return floor(value * scale) / scale;
+}
+
+static CGFloat pixelCeil(CGFloat value) {
+    CGFloat scale = screenScale();
+    return ceil(value * scale) / scale;
+}
+
+static CGFloat pixelRound(CGFloat value) {
+    CGFloat scale = screenScale();
+    return round(value * scale) / scale;
+}
+
 @implementation FSQComponentLayoutManager
 
 + (UIEdgeInsets)smartAdjustedInsetsForViewModel:(FSQComponentsViewModel *)model insets:(UIEdgeInsets)insets isTopEdge:(BOOL)isTopEdge isLeftEdge:(BOOL)isLeftEdge isBottomEdge:(BOOL)isBottomEdge isRightEdge:(BOOL)isRightEdge {
@@ -66,7 +90,7 @@ static const CGFloat kStandardPadding = 10.0;
             break;
         case FSQComponentLayoutTypeFlexible:
         case FSQComponentLayoutTypeFixed:
-            requiredSpace = (specification.widthConstraint != 0.0) ? specification.widthConstraint : round(specification.widthPercentConstraint * width);
+            requiredSpace = (specification.widthConstraint != 0.0) ? specification.widthConstraint : pixelRound(specification.widthPercentConstraint * width);
             break;
     }
     return MIN(requiredSpace, width);
@@ -106,13 +130,13 @@ static const CGFloat kStandardPadding = 10.0;
         }
     }
     
-    CGFloat widthPerGrowthFactor = (numberOfFlexibleItems > 0) ? floor(remainingWidth / totalGrowthFactor) : 0.0;
+    CGFloat widthPerGrowthFactor = (numberOfFlexibleItems > 0) ? pixelFloor(remainingWidth / totalGrowthFactor) : 0.0;
     if (widthPerGrowthFactor > 0.0) {
         CGFloat allocatedWidth = 0.0;
         for (NSInteger i = 0; i < specifications.count; ++i) {
             FSQComponentSpecification *specification = specifications[i];
             if (specification.layoutType == FSQComponentLayoutTypeFlexible) {
-                CGFloat growthWidth = round(widthPerGrowthFactor * specification.growthFactor);
+                CGFloat growthWidth = pixelFloor(widthPerGrowthFactor * specification.growthFactor);
                 requiredWidths[i] += (numberOfFlexibleItems == 1) ? remainingWidth - allocatedWidth : growthWidth;
                 allocatedWidth += growthWidth;
                 numberOfFlexibleItems--;
@@ -123,6 +147,7 @@ static const CGFloat kStandardPadding = 10.0;
     NSMutableArray *frames = [[NSMutableArray alloc] init];
     
     CGFloat xOrigin = 0.0;
+    CGFloat lineHeight = 0.0;
     for (NSInteger i = 0; i < specifications.count; ++i) {
         FSQComponentSpecification *specification = specifications[i];
         UIEdgeInsets insets = [self smartAdjustedInsetsForViewModel:model insets:specification.insets isTopEdge:isTopLine isLeftEdge:(i == 0) isBottomEdge:isBottomLine isRightEdge:(i == specifications.count - 1)];
@@ -131,9 +156,29 @@ static const CGFloat kStandardPadding = 10.0;
         CGFloat height = layoutBlock(specification, layoutWidth).height;
         CGRect frame = CGRectMake(xOrigin + insets.left, top + insets.top, layoutWidth, height);
         xOrigin = CGRectGetMaxX(frame) + insets.right;
+        lineHeight = MAX(lineHeight, frame.size.height);
         
         FSQComponentLayoutInfo info = FSQComponentLayoutInfoMake(frame, insets);
         [frames addObject:[NSValue valueWithBytes:&info objCType:@encode(FSQComponentLayoutInfo)]];
+    }
+    
+    for (NSInteger i = 0; i < specifications.count; ++i) {
+        FSQComponentSpecification *specification = specifications[i];
+        FSQComponentLayoutInfo info;
+        [frames[i] getValue:&info];
+        
+        CGFloat heightDifference = (lineHeight - info.frame.size.height);
+        switch (specification.verticalAlignment) {
+            case FSQComponentVerticalAlignmentTop:
+                // Default
+                break;
+            case FSQComponentVerticalAlignmentCenter:
+                info.frame.origin = CGPointMake(info.frame.origin.x, pixelFloor(info.frame.origin.y + heightDifference / 2.0));
+                break;
+            case FSQComponentVerticalAlignmentBottom:
+                info.frame.origin = CGPointMake(info.frame.origin.x, info.frame.origin.y + heightDifference);
+                break;
+        }
     }
     
     return frames;
@@ -151,34 +196,13 @@ static const CGFloat kStandardPadding = 10.0;
         BOOL isTopLine = (frames.count == 0);
         BOOL isBottomLine = (frames.count + pendingSpecifications.count == model.componentSpecifications.count);
         NSArray *lineFrames = [self componentLayoutInfoForLineWithViewModel:model specifications:pendingSpecifications width:width top:yOrigin isTopLine:isTopLine isBottomLine:isBottomLine layoutBlock:layoutBlock];
-        CGFloat lineHeight = 0.0;
         for (NSInteger i = 0; i < lineFrames.count; ++i) {
             FSQComponentLayoutInfo info;
             [lineFrames[i] getValue:&info];
             yOrigin = MAX(yOrigin, CGRectGetMaxY(info.frame));
-            lineHeight = MAX(lineHeight, info.frame.size.height);
         }
         
-        // Vertical alignment
-        for (int i = 0; i < lineFrames.count; ++i) {
-            FSQComponentLayoutInfo info;
-            [lineFrames[i] getValue:&info];
-            FSQComponentSpecification *spec = pendingSpecifications[i];
-            CGFloat heightDifference = (lineHeight - info.frame.size.height);
-            switch (spec.verticalAlignment) {
-                case FSQComponentVerticalAlignmentTop:
-                    // Default
-                    break;
-                case FSQComponentVerticalAlignmentCenter:
-                    info.frame.origin = CGPointMake(info.frame.origin.x, info.frame.origin.y + heightDifference / 2.0);
-                    break;
-                case FSQComponentVerticalAlignmentBottom:
-                    info.frame.origin = CGPointMake(info.frame.origin.x, info.frame.origin.y + heightDifference);
-                    break;
-            }
-            [frames addObject:[NSValue valueWithBytes:&info objCType:@encode(FSQComponentLayoutInfo)]];
-        }
-        
+        [frames addObjectsFromArray:lineFrames];
         [pendingSpecifications removeAllObjects];
         
         currentWidthAllocated = 0.0;
