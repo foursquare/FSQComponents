@@ -7,6 +7,7 @@
 //
 
 #import "FSQComponentSpecification.h"
+#import "FSQComponentStackView.h"
 #import "FSQComponentsView.h"
 #import "FSQComposable.h"
 
