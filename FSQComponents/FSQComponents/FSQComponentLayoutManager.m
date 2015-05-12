@@ -9,27 +9,9 @@
 #import "FSQComponentLayoutManager.h"
 
 #import "FSQComponentsView.h"
+#import "FSQComponentSizing.h"
 
 static const CGFloat kStandardPadding = 10.0;
-
-static CGFloat screenScale() {
-    static dispatch_once_t predicate;
-    static CGFloat scale;
-    dispatch_once(&predicate, ^() {
-        scale = [[UIScreen mainScreen] scale];
-    });
-    return scale;
-}
-
-static CGFloat pixelFloor(CGFloat value) {
-    CGFloat scale = screenScale();
-    return floor(value * scale) / scale;
-}
-
-static CGFloat pixelRound(CGFloat value) {
-    CGFloat scale = screenScale();
-    return round(value * scale) / scale;
-}
 
 @implementation FSQComponentLayoutManager
 
@@ -85,7 +67,7 @@ static CGFloat pixelRound(CGFloat value) {
             break;
         case FSQComponentLayoutTypeFlexible:
         case FSQComponentLayoutTypeFixed:
-            requiredSpace = (specification.widthConstraint != 0.0) ? specification.widthConstraint : pixelRound(specification.widthPercentConstraint * width);
+            requiredSpace = (specification.widthConstraint != 0.0) ? specification.widthConstraint : fsq_componentPixelRound(specification.widthPercentConstraint * width);
             break;
     }
     return MIN(requiredSpace, width);
@@ -125,13 +107,13 @@ static CGFloat pixelRound(CGFloat value) {
         }
     }
     
-    CGFloat widthPerGrowthFactor = (numberOfFlexibleItems > 0) ? pixelFloor(remainingWidth / totalGrowthFactor) : 0.0;
+    CGFloat widthPerGrowthFactor = (numberOfFlexibleItems > 0) ? fsq_componentPixelFloor(remainingWidth / totalGrowthFactor) : 0.0;
     if (widthPerGrowthFactor > 0.0) {
         CGFloat allocatedWidth = 0.0;
         for (NSInteger i = 0; i < specifications.count; ++i) {
             FSQComponentSpecification *specification = specifications[i];
             if (specification.layoutType == FSQComponentLayoutTypeFlexible) {
-                CGFloat growthWidth = pixelFloor(widthPerGrowthFactor * specification.growthFactor);
+                CGFloat growthWidth = fsq_componentPixelFloor(widthPerGrowthFactor * specification.growthFactor);
                 requiredWidths[i] += (numberOfFlexibleItems == 1) ? remainingWidth - allocatedWidth : growthWidth;
                 allocatedWidth += growthWidth;
                 numberOfFlexibleItems--;
@@ -139,7 +121,7 @@ static CGFloat pixelRound(CGFloat value) {
         }
     }
     
-    NSMutableArray *frames = [[NSMutableArray alloc] init];
+    FSQComponentLayoutInfo infos[specifications.count];
     
     CGFloat xOrigin = 0.0;
     CGFloat lineHeight = 0.0;
@@ -153,27 +135,28 @@ static CGFloat pixelRound(CGFloat value) {
         xOrigin = CGRectGetMaxX(frame) + insets.right;
         lineHeight = MAX(lineHeight, frame.size.height);
         
-        FSQComponentLayoutInfo info = FSQComponentLayoutInfoMake(frame, insets);
-        [frames addObject:[NSValue valueWithBytes:&info objCType:@encode(FSQComponentLayoutInfo)]];
+        infos[i] = FSQComponentLayoutInfoMake(frame, insets);
     }
     
+    NSMutableArray *frames = [[NSMutableArray alloc] init];
     for (NSInteger i = 0; i < specifications.count; ++i) {
         FSQComponentSpecification *specification = specifications[i];
-        FSQComponentLayoutInfo info;
-        [frames[i] getValue:&info];
         
-        CGFloat heightDifference = (lineHeight - info.frame.size.height);
+        FSQComponentLayoutInfo *info = &infos[i];
+        CGFloat heightDifference = (lineHeight - info->frame.size.height);
         switch (specification.verticalAlignment) {
             case FSQComponentVerticalAlignmentTop:
                 // Default
                 break;
             case FSQComponentVerticalAlignmentCenter:
-                info.frame.origin = CGPointMake(info.frame.origin.x, pixelFloor(info.frame.origin.y + heightDifference / 2.0));
+                info->frame.origin = CGPointMake(info->frame.origin.x, fsq_componentPixelFloor(info->frame.origin.y + heightDifference / 2.0));
                 break;
             case FSQComponentVerticalAlignmentBottom:
-                info.frame.origin = CGPointMake(info.frame.origin.x, info.frame.origin.y + heightDifference);
+                info->frame.origin = CGPointMake(info->frame.origin.x, info->frame.origin.y + heightDifference);
                 break;
         }
+        
+        [frames addObject:[NSValue valueWithBytes:info objCType:@encode(FSQComponentLayoutInfo)]];
     }
     
     return frames;

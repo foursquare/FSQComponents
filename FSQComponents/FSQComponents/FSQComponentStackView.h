@@ -23,6 +23,8 @@ typedef NS_ENUM(NSUInteger, FSQComponentStackType) {
 @property (nonatomic, readonly) FSQComponentSpecification *topSpecification;
 @property (nonatomic, readonly) FSQComponentStackType stackType;
 
+@property (nonatomic) CGFloat minimumHeight;
+
 - (instancetype)initWithBottomSpecification:(FSQComponentSpecification *)bottomSpecification topSpecification:(FSQComponentSpecification *)topSpecification stackType:(FSQComponentStackType)stackType;
 
 @end
