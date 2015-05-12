@@ -26,11 +26,6 @@ static CGFloat pixelFloor(CGFloat value) {
     return floor(value * scale) / scale;
 }
 
-static CGFloat pixelCeil(CGFloat value) {
-    CGFloat scale = screenScale();
-    return ceil(value * scale) / scale;
-}
-
 static CGFloat pixelRound(CGFloat value) {
     CGFloat scale = screenScale();
     return round(value * scale) / scale;
