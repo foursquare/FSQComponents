@@ -21,11 +21,16 @@
 // the underlying attributed string drawn by the label, if set, the label ignores the properties above.
 @property (nonatomic) NSAttributedString *attributedText;
 
+@property (nonatomic) UIColor *backgroundColor;
+
 @property (nonatomic) NSInteger numberOfLines;
 
 @property (nonatomic) BOOL adjustsFontSizeToFitWidth;
 @property (nonatomic) UIBaselineAdjustment baselineAdjustment;
 @property (nonatomic) CGFloat minimumScaleFactor;
+
+@property (nonatomic) CGFloat horizontalPadding;
+@property (nonatomic) CGFloat verticalPadding;
 
 - (instancetype)initWithText:(NSString *)text;
 - (instancetype)initWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor;

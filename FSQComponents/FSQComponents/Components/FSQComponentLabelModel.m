@@ -47,9 +47,20 @@
 
 #pragma mark - UILabel (FSQComponentLabel) -
 
+@interface UILabel (FSQComponentLabelPrivate)
+
+@property (nonatomic) FSQComponentLabelModel *fsqComponentLabelModel;
+
+@end
+
 @implementation UILabel (FSQComponentLabel)
 
 - (void)configureWithViewModel:(FSQComponentLabelModel *)model {
+    self.fsqComponentLabelModel = model;
+    
+    self.backgroundColor = model.backgroundColor;
+    self.opaque = (self.backgroundColor != nil);
+    
     if (model.attributedText) {
         self.attributedText = model.attributedText;
     }
@@ -68,15 +79,25 @@
 }
 
 - (void)prepareForReuse {
-    
+    self.fsqComponentLabelModel = nil;
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
-    
+    self.backgroundColor = self.fsqComponentLabelModel.backgroundColor;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    
+    self.backgroundColor = self.fsqComponentLabelModel.backgroundColor;
+}
+
+#pragma mark - Private
+
+- (void)setFsqComponentLabelModel:(FSQComponentLabelModel *)fsqComponentLabelModel {
+    return objc_setAssociatedObject(self, @selector(fsqComponentLabelModel), fsqComponentLabelModel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (FSQComponentLabelModel *)fsqComponentLabelModel {
+    return objc_getAssociatedObject(self, @selector(fsqComponentLabelModel));
 }
 
 #pragma mark - Class methods
@@ -91,6 +112,8 @@
     [labelForSizing configureWithViewModel:model];
     
     CGSize size = [labelForSizing sizeThatFits:constrainedToSize];
+    size.width += 2.0 * model.horizontalPadding;
+    size.height += 2.0 * model.verticalPadding;
     return CGSizeMake(MIN(size.width, constrainedToSize.width), MIN(size.height, constrainedToSize.height));
 }
 
