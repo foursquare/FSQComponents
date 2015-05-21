@@ -58,8 +58,7 @@
 - (void)configureWithViewModel:(FSQComponentLabelModel *)model {
     self.fsqComponentLabelModel = model;
     
-    self.backgroundColor = model.backgroundColor;
-    self.opaque = (self.backgroundColor != nil);
+    [self updateBackgroundColorWithModel:model];
     
     if (model.attributedText) {
         self.attributedText = model.attributedText;
@@ -83,14 +82,21 @@
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
-    self.backgroundColor = self.fsqComponentLabelModel.backgroundColor;
+    [self updateBackgroundColorWithModel:self.fsqComponentLabelModel];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    self.backgroundColor = self.fsqComponentLabelModel.backgroundColor;
+    [self updateBackgroundColorWithModel:self.fsqComponentLabelModel];
 }
 
 #pragma mark - Private
+
+- (void)updateBackgroundColorWithModel:(FSQComponentLabelModel *)model {
+    UIColor *color = (model.backgroundColor) ?: [UIColor clearColor];
+    if (self.backgroundColor != color) {
+        self.backgroundColor = color;
+    }
+}
 
 - (void)setFsqComponentLabelModel:(FSQComponentLabelModel *)fsqComponentLabelModel {
     return objc_setAssociatedObject(self, @selector(fsqComponentLabelModel), fsqComponentLabelModel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
