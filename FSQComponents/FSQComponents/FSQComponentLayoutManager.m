@@ -63,6 +63,7 @@ static const CGFloat kStandardPadding = 10.0;
     CGFloat requiredSpace = 0.0;
     switch (specification.layoutType) {
         case FSQComponentLayoutTypeFull:
+        case FSQComponentLayoutTypeDyanmic:
             requiredSpace = width;
             break;
         case FSQComponentLayoutTypeFlexible:
@@ -194,7 +195,8 @@ static const CGFloat kStandardPadding = 10.0;
         }
         
         switch (specification.layoutType) {
-            case FSQComponentLayoutTypeFull: {
+            case FSQComponentLayoutTypeFull:
+            case FSQComponentLayoutTypeDyanmic: {
                 if (pendingSpecifications.count > 0) {
                     flushLine();
                 }
@@ -204,9 +206,13 @@ static const CGFloat kStandardPadding = 10.0;
                 
                 UIEdgeInsets insets = [self smartAdjustedInsetsForViewModel:model insets:specification.insets isTopEdge:isTopEdge isLeftEdge:YES isBottomEdge:isBottomEdge isRightEdge:YES];
                 
-                CGFloat layoutWidth = width - insets.left - insets.right;
-                CGFloat height = layoutBlock(specification, layoutWidth).height;
-                CGRect frame = CGRectMake(insets.left, yOrigin + insets.top, layoutWidth, height);
+                CGFloat widthConstraint = width - insets.left - insets.right;
+                CGSize layoutSize = layoutBlock(specification, widthConstraint);
+                
+                CGFloat width = (specification.layoutType == FSQComponentLayoutTypeFull) ? widthConstraint : layoutSize.width;
+                CGFloat height = layoutSize.height;
+                
+                CGRect frame = CGRectMake(insets.left, yOrigin + insets.top, width, height);
                 yOrigin = CGRectGetMaxY(frame) + insets.bottom;
                 
                 FSQComponentLayoutInfo info = FSQComponentLayoutInfoMake(frame, insets);

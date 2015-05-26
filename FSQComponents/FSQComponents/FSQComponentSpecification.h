@@ -18,17 +18,23 @@ typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
      */
     FSQComponentLayoutTypeFull = 0,
     /**
-     *  Specifies that the component can share a line
-     *  with other components. The minimumWidthPercent property are used to
-     *  control the layout of the component.
+     *  Specifies that the component can share a line with other components. The
+     *  widthConstraint and widthPercentConstraint properties are used to
+     *  control the layout of the component. Flexible components will then grow
+     *  to occupy any unused space on a line.
      */
     FSQComponentLayoutTypeFlexible,
     /**
-     *  Specifies that the component can share a line
-     *  with other components. The fixedWidth or fixedWidthPercent properties are
-     *  used to control the layout of the component.
+     *  Specifies that the component can share a line with other components. The
+     *  widthConstraint and widthPercentConstraint properties are used to
+     *  control the layout of the component.
      */
-    FSQComponentLayoutTypeFixed
+    FSQComponentLayoutTypeFixed,
+    /**
+     * Specifies that the component should be sized to directly what is returned
+     * from sizeForViewModel:constrainedToSize:
+     */
+    FSQComponentLayoutTypeDyanmic
 };
 
 /**
