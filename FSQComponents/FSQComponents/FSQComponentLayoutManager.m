@@ -69,7 +69,7 @@ static const CGFloat kStandardPadding = 10.0;
         case FSQComponentLayoutTypeFixed:
             requiredSpace = (specification.widthConstraint != 0.0) ? specification.widthConstraint : fsq_componentPixelRound(specification.widthPercentConstraint * width);
             break;
-        case FSQComponentLayoutTypeDyanmic:
+        case FSQComponentLayoutTypeDynamic:
             requiredSpace = [specification.viewClass sizeForViewModel:specification.viewModel constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)].width;
     }
     return MIN(requiredSpace, width);
@@ -221,7 +221,7 @@ static const CGFloat kStandardPadding = 10.0;
             }
             case FSQComponentLayoutTypeFlexible:
             case FSQComponentLayoutTypeFixed:
-            case FSQComponentLayoutTypeDyanmic: {
+            case FSQComponentLayoutTypeDynamic: {
                 CGFloat leftInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:(pendingSpecifications.count == 0)];
                 CGFloat leftEdgeInset = [self smartAdjustedLeftInsetForViewModel:model insets:specification.insets isEdgeElement:YES];
                 

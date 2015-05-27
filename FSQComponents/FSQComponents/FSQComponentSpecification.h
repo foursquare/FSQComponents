@@ -34,7 +34,7 @@ typedef NS_ENUM(NSUInteger, FSQComponentLayoutType) {
      * Specifies that the component should be sized to directly what is returned
      * from sizeForViewModel:constrainedToSize:
      */
-    FSQComponentLayoutTypeDyanmic
+    FSQComponentLayoutTypeDynamic
 };
 
 /**
