@@ -179,7 +179,7 @@ static const CGFloat kStandardPadding = 10.0;
         for (NSInteger i = 0; i < lineFrames.count; ++i) {
             FSQComponentLayoutInfo info;
             [lineFrames[i] getValue:&info];
-            yOrigin = MAX(yOrigin, CGRectGetMaxY(info.frame));
+            yOrigin = MAX(yOrigin, CGRectGetMaxY(info.frame) + info.insets.bottom);
         }
         
         [frames addObjectsFromArray:lineFrames];
