@@ -47,6 +47,12 @@ extern const UIEdgeInsets kFSQComponentSmartInsets;
 @property (nonatomic) BOOL smartInsetsAppliesToEdges;
 
 /**
+ *  Determines if user interaction is enabled for the components view. The 
+ *  default is YES.
+ */
+@property (nonatomic) BOOL userInteractionEnabled;
+
+/**
  *  This string can be used as the reuse identifier if the components view is
  *  being used in a reuse pool as an optimization to minimize modifications to
  *  the view hierarchy.

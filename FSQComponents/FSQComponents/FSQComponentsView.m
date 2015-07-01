@@ -27,6 +27,7 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
     if ((self = [super init])) {
         _componentSpecifications = [componentSpecifications copy];
         _smartInsetsAppliesToEdges = smartInsetsAppliesToEdges;
+        _userInteractionEnabled = YES;
         
         NSMutableArray *reuseComponents = [[NSMutableArray alloc] init];
         for (FSQComponentSpecification *specification in componentSpecifications) {
@@ -68,6 +69,7 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
 - (void)configureWithViewModel:(FSQComponentsViewModel *)model {
     self.model = model;
     self.backgroundColor = model.backgroundColor;
+    self.userInteractionEnabled = model.userInteractionEnabled;
     
     if ([self needsToBeResetForModel:model]) {
         [self reset];
