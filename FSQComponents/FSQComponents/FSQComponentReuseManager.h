@@ -12,8 +12,6 @@
 
 @interface FSQComponentReuseManager : NSObject
 
-@property (nonatomic) NSMutableDictionary *classToReusePoolMap;
-
 + (instancetype)shared;
 
 - (void)addViewToReusePool:(UIView<FSQComposable> *)view;

@@ -10,7 +10,14 @@
 
 #import "FSQComposable.h"
 
-static const CGFloat kReusePoolLimit = 10;
+static const CGFloat kReusePoolViewTypeLimit = 10;
+static const CGFloat kReusePoolCountPerViewLimit = 10;
+
+@interface FSQComponentReuseManager ()
+
+@property (nonatomic) NSCache *classToReusePoolMap;
+
+@end
 
 @implementation FSQComponentReuseManager
 
@@ -25,26 +32,32 @@ static const CGFloat kReusePoolLimit = 10;
 
 - (instancetype)init {
     if ((self = [super init])) {
-        self.classToReusePoolMap = [[NSMutableDictionary alloc] init];
+        self.classToReusePoolMap = [[NSCache alloc] init];
+        self.classToReusePoolMap.countLimit = kReusePoolViewTypeLimit;
     }
     return self;
 }
 
+- (void)didReceiveMemoryWarning:(NSNotification *)notification {
+    [self.classToReusePoolMap removeAllObjects];
+}
+
 - (void)addViewToReusePool:(UIView<FSQComposable> *)view {
     NSString *identifier = NSStringFromClass([view class]);
-    NSMutableSet *reusePool = self.classToReusePoolMap[identifier];
+    NSMutableSet *reusePool = [self.classToReusePoolMap objectForKey:identifier];
     if (!reusePool) {
-        reusePool = [[NSMutableSet alloc] initWithCapacity:kReusePoolLimit];
-        self.classToReusePoolMap[identifier] = reusePool;
+        reusePool = [[NSMutableSet alloc] initWithCapacity:kReusePoolCountPerViewLimit];
+        [self.classToReusePoolMap setObject:reusePool forKey:identifier];
     }
     
-    if (reusePool.count < kReusePoolLimit) {
+    if (reusePool.count < kReusePoolCountPerViewLimit) {
         [reusePool addObject:view];
     }
 }
 
 - (UIView<FSQComposable> *)dequeueViewForClass:(Class)viewClass {
-    NSMutableSet *reusePool = self.classToReusePoolMap[NSStringFromClass(viewClass)];
+    NSString *identifier = NSStringFromClass(viewClass);
+    NSMutableSet *reusePool = [self.classToReusePoolMap objectForKey:identifier];
     
     UIView<FSQComposable> *view;
     if (reusePool.count > 0) {
