@@ -142,12 +142,6 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
     }
 }
 
-- (void)dealloc {
-    [self.views enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIView<FSQComposable> *view, NSUInteger idx, BOOL *stop) {
-        [[FSQComponentReuseManager shared] addViewToReusePool:view];
-    }];
-}
-
 #pragma mark - Class methods
 
 + (CGSize)sizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
