@@ -43,16 +43,18 @@ static const CGFloat kReusePoolCountPerViewLimit = 10;
 }
 
 - (void)addViewToReusePool:(UIView<FSQComposable> *)view {
-    NSString *identifier = NSStringFromClass([view class]);
-    NSMutableSet *reusePool = [self.classToReusePoolMap objectForKey:identifier];
-    if (!reusePool) {
-        reusePool = [[NSMutableSet alloc] initWithCapacity:kReusePoolCountPerViewLimit];
-        [self.classToReusePoolMap setObject:reusePool forKey:identifier];
-    }
-    
-    if (reusePool.count < kReusePoolCountPerViewLimit) {
-        [reusePool addObject:view];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^() {
+        NSString *identifier = NSStringFromClass([view class]);
+        NSMutableSet *reusePool = [self.classToReusePoolMap objectForKey:identifier];
+        if (!reusePool) {
+            reusePool = [[NSMutableSet alloc] initWithCapacity:kReusePoolCountPerViewLimit];
+            [self.classToReusePoolMap setObject:reusePool forKey:identifier];
+        }
+        
+        if (reusePool.count < kReusePoolCountPerViewLimit) {
+            [reusePool addObject:view];
+        }
+    });
 }
 
 - (UIView<FSQComposable> *)dequeueViewForClass:(Class)viewClass {
