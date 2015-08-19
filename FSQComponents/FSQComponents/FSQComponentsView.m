@@ -19,6 +19,11 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
 
 @implementation FSQComponentsViewModel
 
+- (instancetype)init {
+    [NSException raise:@"FSQComponentsViewModel" format:@"init has not been implemented."];
+    return [self initWithComponentSpecifications:nil];
+}
+
 - (instancetype)initWithComponentSpecifications:(NSArray *)componentSpecifications {
     return [self initWithComponentSpecifications:componentSpecifications smartInsetsAppliesToEdges:YES];
 }

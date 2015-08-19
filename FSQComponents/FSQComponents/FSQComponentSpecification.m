@@ -13,6 +13,11 @@
 
 @implementation FSQComponentSpecification
 
+- (instancetype)init {
+    [NSException raise:@"FSQComponentSpecification" format:@"init has not been implemented."];
+    return [self initWithViewModel:nil viewClass:nil];
+}
+
 - (instancetype)initWithViewModel:(id)viewModel viewClass:(Class)viewClass {
     return [self initWithViewModel:viewModel viewClass:viewClass insets:kFSQComponentSmartInsets];
 }
