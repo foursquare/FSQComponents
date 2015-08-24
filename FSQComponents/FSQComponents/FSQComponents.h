@@ -11,4 +11,6 @@
 #import "FSQComponentsView.h"
 #import "FSQComposable.h"
 
+#import "FSQComponentActivityIndicatorModel.h"
 #import "FSQComponentButtonModel.h"
+#import "FSQComponentLabelModel.h"
