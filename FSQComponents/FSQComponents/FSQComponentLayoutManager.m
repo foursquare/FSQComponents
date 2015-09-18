@@ -23,40 +23,28 @@ static const CGFloat kStandardPadding = 10.0;
     return UIEdgeInsetsMake(top, left, bottom, right);
 }
 
-+ (CGFloat)smartAdjustedTopInsetForViewModel:(FSQComponentsViewModel *)model insets:(UIEdgeInsets)insets isEdgeElement:(BOOL)isEdgeElement {
-    CGFloat inset = insets.top;
-    if (inset == kFSQComponentSmartInsets.top) {
++ (CGFloat)smartAdjustedInsetForViewModel:(FSQComponentsViewModel *)model inset:(CGFloat)inset smartInset:(CGFloat)smartInset isEdgeElement:(BOOL)isEdgeElement {
+    if (inset == smartInset) {
         CGFloat edgePadding = (model.smartInsetsAppliesToEdges) ? kStandardPadding : 0.0;
         inset = (isEdgeElement) ? edgePadding : kStandardPadding / 2.0;
     }
     return inset;
+}
+
++ (CGFloat)smartAdjustedTopInsetForViewModel:(FSQComponentsViewModel *)model insets:(UIEdgeInsets)insets isEdgeElement:(BOOL)isEdgeElement {
+    return [self smartAdjustedInsetForViewModel:model inset:insets.top smartInset:kFSQComponentSmartInsets.top isEdgeElement:isEdgeElement];
 }
 
 + (CGFloat)smartAdjustedLeftInsetForViewModel:(FSQComponentsViewModel *)model insets:(UIEdgeInsets)insets isEdgeElement:(BOOL)isEdgeElement {
-    CGFloat inset = insets.left;
-    if (inset == kFSQComponentSmartInsets.left) {
-        CGFloat edgePadding = (model.smartInsetsAppliesToEdges) ? kStandardPadding : 0.0;
-        inset = (isEdgeElement) ? edgePadding : kStandardPadding / 2.0;
-    }
-    return inset;
+    return [self smartAdjustedInsetForViewModel:model inset:insets.left smartInset:kFSQComponentSmartInsets.left isEdgeElement:isEdgeElement];
 }
 
 + (CGFloat)smartAdjustedBottomInsetForViewModel:(FSQComponentsViewModel *)model insets:(UIEdgeInsets)insets isEdgeElement:(BOOL)isEdgeElement {
-    CGFloat inset = insets.bottom;
-    if (inset == kFSQComponentSmartInsets.bottom) {
-        CGFloat edgePadding = (model.smartInsetsAppliesToEdges) ? kStandardPadding : 0.0;
-        inset = (isEdgeElement) ? edgePadding : kStandardPadding / 2.0;
-    }
-    return inset;
+    return [self smartAdjustedInsetForViewModel:model inset:insets.bottom smartInset:kFSQComponentSmartInsets.bottom isEdgeElement:isEdgeElement];
 }
 
 + (CGFloat)smartAdjustedRightInsetForViewModel:(FSQComponentsViewModel *)model insets:(UIEdgeInsets)insets isEdgeElement:(BOOL)isEdgeElement {
-    CGFloat inset = insets.right;
-    if (inset == kFSQComponentSmartInsets.right) {
-        CGFloat edgePadding = (model.smartInsetsAppliesToEdges) ? kStandardPadding : 0.0;
-        inset = (isEdgeElement) ? edgePadding : kStandardPadding / 2.0;
-    }
-    return inset;
+    return [self smartAdjustedInsetForViewModel:model inset:insets.right smartInset:kFSQComponentSmartInsets.right isEdgeElement:isEdgeElement];
 }
 
 + (CGFloat)layoutWidthForSpecification:(FSQComponentSpecification *)specification width:(CGFloat)width {
