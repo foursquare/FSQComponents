@@ -12,6 +12,7 @@
 #import "ComponentPhotoView.h"
 #import "ComponentTextView.h"
 #import "ContentModel.h"
+#import "FSQComponentLabelModel.h"
 
 #define kTitleFont [UIFont systemFontOfSize:18.0]
 #define kTitleColor [UIColor colorWithRed:0.0 green:170.0/255.0 blue:1.0 alpha:1.0]
@@ -37,14 +38,16 @@
 }
 
 + (FSQComponentSpecification *)newTitleSpecificationForContentModel:(ContentModel *)contentModel {
-    ComponentTextViewModel *model = [[ComponentTextViewModel alloc] initWithText:contentModel.name font:kTitleFont color:kTitleColor];
-    FSQComponentSpecification *specification = [[FSQComponentSpecification alloc] initWithViewModel:model viewClass:[ComponentTextView class]];
+    FSQComponentLabelModel *model = [[FSQComponentLabelModel alloc] initWithText:contentModel.name font:kTitleFont textColor:kTitleColor];
+    FSQComponentSpecification *specification = [[FSQComponentSpecification alloc] initWithViewModel:model viewClass:[UILabel class]];
+    specification.layoutType = FSQComponentLayoutTypeDynamic;
     return specification;
 }
 
 + (FSQComponentSpecification *)newHorizontalRuleSpecificationForContentModel:(ContentModel *)contentModel {
     ComponentHorizontalRuleViewModel *model = [[ComponentHorizontalRuleViewModel alloc] init];
     FSQComponentSpecification *specification = [[FSQComponentSpecification alloc] initWithViewModel:model viewClass:[ComponentHorizontalRuleView class]];
+    specification.layoutType = FSQComponentLayoutTypeFull;
     return specification;
 }
 
