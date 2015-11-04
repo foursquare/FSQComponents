@@ -112,7 +112,7 @@
     static dispatch_once_t predicate;
     static UILabel *labelForSizing;
     dispatch_once(&predicate, ^() {
-        labelForSizing = [[self alloc] initWithFrame:CGRectZero];
+        labelForSizing = [[UILabel alloc] initWithFrame:CGRectZero];
     });
     
     [labelForSizing configureWithViewModel:model];
