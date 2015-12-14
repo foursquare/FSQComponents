@@ -119,6 +119,7 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
         [[FSQComponentReuseManager shared] addViewToReusePool:view];
     }];
     self.views = nil;
+    self.accessibilityElements = nil;
 }
 
 - (void)setupViewsForModel:(FSQComponentsViewModel *)model {
@@ -129,6 +130,7 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
         [views addObject:view];
     }
     self.views = views;
+    self.accessibilityElements = self.views;
 }
 
 - (void)prepareForReuse {
