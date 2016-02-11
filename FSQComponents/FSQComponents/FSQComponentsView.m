@@ -149,6 +149,10 @@ static NSString * const kReuseIdentifierDelimiter = @"|";
     }
 }
 
+- (CGSize)sizeThatFits:(CGSize)size {
+    return [[self class] sizeForViewModel:self.model constrainedToSize:size];
+}
+
 #pragma mark - Class methods
 
 + (CGSize)sizeForViewModel:(FSQComponentsViewModel *)model constrainedToSize:(CGSize)constrainedToSize {
