@@ -21,6 +21,9 @@
 @property (nonatomic) CGFloat horizontalPadding;
 @property (nonatomic) CGFloat verticalPadding;
 
+@property (nonatomic) UIControlContentHorizontalAlignment contentHorizontalAlignment;
+@property (nonatomic) UIControlContentVerticalAlignment contentVerticalAlignment;
+
 - (instancetype)initWithImage:(UIImage *)image title:(NSString *)title titleColor:(UIColor *)titleColor;
 
 - (void)setImage:(UIImage *)image forState:(UIControlState)state;

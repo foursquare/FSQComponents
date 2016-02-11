@@ -203,6 +203,8 @@ static NSArray* allControlEvents() {
     self.titleLabel.font = model.font;
     self.backgroundColor = model.backgroundColor;
     self.layer.cornerRadius = model.cornerRadius;
+    self.contentHorizontalAlignment = model.contentHorizontalAlignment;
+    self.contentVerticalAlignment = model.contentVerticalAlignment;
     
     [self resetState];
     [self configureStateWithModel:model];
