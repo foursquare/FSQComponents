@@ -97,9 +97,6 @@ static NSArray* allControlEvents() {
         [self setImage:image forState:UIControlStateNormal];
         [self setTitle:title forState:UIControlStateNormal];
         [self setTitleColor:titleColor forState:UIControlStateNormal];
-        
-        self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        self.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
     }
     return self;
 }
