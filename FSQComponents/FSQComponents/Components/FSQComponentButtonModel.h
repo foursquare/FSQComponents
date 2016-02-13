@@ -21,8 +21,8 @@
 @property (nonatomic) CGFloat horizontalPadding;
 @property (nonatomic) CGFloat verticalPadding;
 
-@property (nonatomic, copy) NSNumber *contentHorizontalAlignment; // wraps UIControlContentHorizontalAlignment
-@property (nonatomic, copy) NSNumber *contentVerticalAlignment; // wraps UIControlContentVerticalAlignment
+@property (nonatomic) UIControlContentHorizontalAlignment contentHorizontalAlignment;
+@property (nonatomic) UIControlContentVerticalAlignment contentVerticalAlignment;
 
 - (instancetype)initWithImage:(UIImage *)image title:(NSString *)title titleColor:(UIColor *)titleColor;
 

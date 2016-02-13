@@ -97,6 +97,9 @@ static NSArray* allControlEvents() {
         [self setImage:image forState:UIControlStateNormal];
         [self setTitle:title forState:UIControlStateNormal];
         [self setTitleColor:titleColor forState:UIControlStateNormal];
+        
+        self.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        self.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
     }
     return self;
 }
@@ -203,12 +206,8 @@ static NSArray* allControlEvents() {
     self.titleLabel.font = model.font;
     self.backgroundColor = model.backgroundColor;
     self.layer.cornerRadius = model.cornerRadius;
-    if (self.contentHorizontalAlignment) {
-        self.contentHorizontalAlignment = [model.contentHorizontalAlignment integerValue];
-    }
-    if (self.contentVerticalAlignment) {
-        self.contentVerticalAlignment = [model.contentVerticalAlignment integerValue];
-    }
+    self.contentHorizontalAlignment = model.contentHorizontalAlignment;
+    self.contentVerticalAlignment = model.contentVerticalAlignment;
     
     [self resetState];
     [self configureStateWithModel:model];
