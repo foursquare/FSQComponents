@@ -279,16 +279,17 @@ static NSArray* allControlEvents() {
     // possibly resulting in a crash since BurritoButton will have different properties to set than FSQComponentButton).
     
     static dispatch_once_t predicate;
-    UIButton *buttonForSizing;
     static NSCache *cache;
     dispatch_once(&predicate, ^() {
         cache = [[NSCache alloc] init];
     });
+    
     NSString *className = NSStringFromClass([self class]);
-    if (![cache objectForKey:className]) {
-        [cache setObject:[[self alloc] initWithFrame:CGRectZero] forKey:className];
+    UIButton *buttonForSizing = [cache objectForKey:className];
+    if (!buttonForSizing) {
+        buttonForSizing = [[self alloc] initWithFrame:CGRectZero];
+        [cache setObject:buttonForSizing forKey:className];
     }
-    buttonForSizing = [cache objectForKey:className];
     
     [buttonForSizing configureWithViewModel:model];
     
