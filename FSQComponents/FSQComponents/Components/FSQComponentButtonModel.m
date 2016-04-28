@@ -271,11 +271,25 @@ static NSArray* allControlEvents() {
 #pragma mark - Class methods
 
 + (CGSize)sizeForViewModel:(FSQComponentButtonModel *)model constrainedToSize:(CGSize)constrainedToSize {
+    NSAssert([NSThread currentThread].isMainThread, @"expected to be on main thread");
+    
+    // NOTE: We're using a static cache to keep a copy of button objects instead of using a static button. FSQComponentButton
+    // can be subclassed (e.g. BurritoButton). We don't want to run into the situation where buttonForSizing is a
+    // static subclassed object and we later want to call configureWithViewModel with a different class (and
+    // possibly resulting in a crash since BurritoButton will have different properties to set than FSQComponentButton).
+    
     static dispatch_once_t predicate;
-    static UIButton *buttonForSizing;
+    static NSCache *cache;
     dispatch_once(&predicate, ^() {
-        buttonForSizing = [[self alloc] initWithFrame:CGRectZero];
+        cache = [[NSCache alloc] init];
     });
+    
+    NSString *className = NSStringFromClass([self class]);
+    UIButton *buttonForSizing = [cache objectForKey:className];
+    if (!buttonForSizing) {
+        buttonForSizing = [[self alloc] initWithFrame:CGRectZero];
+        [cache setObject:buttonForSizing forKey:className];
+    }
     
     [buttonForSizing configureWithViewModel:model];
     
