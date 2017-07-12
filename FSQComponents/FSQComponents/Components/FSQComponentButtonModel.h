@@ -39,7 +39,7 @@
 
 @end
 
-@interface UIButton (FSQComponentButton) <FSQComposable>
+@interface UIButton (FSQComponentButton)
 
 - (void)configureWithViewModel:(FSQComponentButtonModel *)model;
 
