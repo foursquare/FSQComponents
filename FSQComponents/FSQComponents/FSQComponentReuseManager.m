@@ -10,8 +10,8 @@
 
 #import "FSQComposable.h"
 
-static const CGFloat kReusePoolViewTypeLimit = 10;
-static const CGFloat kReusePoolCountPerViewLimit = 10;
+static const NSUInteger kReusePoolViewTypeLimit = 10;
+static const NSUInteger kReusePoolCountPerViewLimit = 10;
 
 @interface FSQComponentReuseManager ()
 
