@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-extern CGFloat fsq_componentScreenScale();
+extern CGFloat fsq_componentScreenScale(void);
 
 static inline CGFloat fsq_componentPixelFloor(CGFloat value) {
     CGFloat scale = fsq_componentScreenScale();
